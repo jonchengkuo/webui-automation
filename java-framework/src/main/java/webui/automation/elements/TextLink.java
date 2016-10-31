@@ -53,7 +53,7 @@ public class TextLink extends BaseElement<TextLink> {
      */
     public String getText() {
         if (this.isLocatedByTBD()) {
-            return ByTBD.MOCKED_STRING_VALUE;
+            return ByTBD.getMockedStringValue();
         } else {
             return getWebElement().getText();
         }

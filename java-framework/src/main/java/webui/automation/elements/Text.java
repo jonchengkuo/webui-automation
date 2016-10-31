@@ -1,4 +1,3 @@
-
 package webui.automation.elements;
 
 import org.openqa.selenium.By;
