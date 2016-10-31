@@ -64,7 +64,7 @@ public class BaseElement<T> {
      *         <code>false</code> otherwise
      */
     protected boolean isLocatedByTBD() {
-        return (this.locator == ByTBD.ByTBD);
+        return (this.locator instanceof ByTBD);
     }
 
     /**
@@ -152,7 +152,6 @@ public class BaseElement<T> {
      * @param  timeOutInSeconds  timeout in seconds
      * @return <code>true</code> if this UI element exists within the default implicit wait timeout;
      *         <code>false</code> otherwise
-     * @throws TimeoutException if this UI element still does not exist after the default implicit wait timeout is reached 
      */
     public boolean exists() {
         return exists(WebUI.defaultImplicitWaitTimeout);
@@ -170,7 +169,6 @@ public class BaseElement<T> {
      * @param  timeOutInSeconds  timeout in seconds
      * @return <code>true</code> if this UI element exists within the specified timeout;
      *         <code>false</code> otherwise
-     * @throws TimeoutException if this UI element still does not exist after the specified timeout is reached 
      */
     public boolean exists(int timeOutInSeconds) {
         try {

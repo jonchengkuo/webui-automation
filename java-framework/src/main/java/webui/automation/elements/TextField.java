@@ -58,7 +58,7 @@ public class TextField extends BaseElement<TextField> {
      */
     public String getText() {
         if (this.isLocatedByTBD()) {
-            return ByTBD.MOCKED_STRING_VALUE;
+            return ByTBD.getMockedStringValue();
         } else {
             // Get the web element with the default implicit timeout.
             WebElement webElement = getWebElement();

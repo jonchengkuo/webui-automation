@@ -35,17 +35,17 @@ public class Table extends ContainerElement<Table> {
      */
     public List<WebElement> getRowElements() {
         WebElement tableElement = getWebElement();
-        return findRowElements(tableElement);
+        return TableHelper.findRowElements(tableElement);
     }
 
     public WebElement getRowElement(int rowIndex) {
         WebElement tableElement = getWebElement();
-        return findRowElement(tableElement, rowIndex);
+        return TableHelper.findRowElement(tableElement, rowIndex);
     }
 
     public List<WebElement> getCellElements(int rowIndex) {
         WebElement rowElement = getRowElement(rowIndex);
-        return findCellElements(rowElement);
+        return TableHelper.findCellElements(rowElement);
     }
 
     public List<String> getCellTexts(int rowIndex) {
@@ -59,51 +59,11 @@ public class Table extends ContainerElement<Table> {
 
     public WebElement getCellElement(int rowIndex, int columnIndex) {
         WebElement rowElement = getRowElement(rowIndex);
-        return findCellElement(rowElement, columnIndex);
+        return TableHelper.findCellElement(rowElement, columnIndex);
     }
 
     public String getCellText(int rowIndex, int columnIndex) {
         return getCellElement(rowIndex, columnIndex).getText();
-    }
-
-
-    //////  (Static) Table Helper Functions  //////
-    // These functions take the WebElement of a table or row and operate on it.
-    // Because they do not need to get the WebElement themselves every time,
-    // it is more efficient to use them instead of the general Table.getXXX methods.
-
-    public static List<WebElement> findRowElements(WebElement tableElement) {
-        // Find the <tr> elements within the table.
-        List<WebElement> rowElements = tableElement.findElements(By.xpath("tbody/tr"));
-        if (rowElements.size() == 0) {
-            rowElements = tableElement.findElements(By.xpath("tr"));
-        }
-        return rowElements;
-    }
-
-    public static WebElement findRowElement(WebElement tableElement, int rowIndex) {
-        List<WebElement> rowElements = findRowElements(tableElement);
-        int maxIndex = rowElements.size() - 1;
-        if (rowIndex < 0 || rowIndex > maxIndex) {
-            throw new IndexOutOfBoundsException(
-                "The table row index (" + rowIndex + ") is out of bounds (0.." + maxIndex + ").");
-        }
-        return rowElements.get(rowIndex);
-    }
-
-    public static List<WebElement> findCellElements(WebElement rowElement) {
-        // Find the <td> elements within a table row.
-        return rowElement.findElements(By.xpath("td"));
-    }
-
-    public static WebElement findCellElement(WebElement rowElement, int columnIndex) {
-        List<WebElement> cellElements = findCellElements(rowElement);
-        int maxIndex = cellElements.size() - 1;
-        if (columnIndex < 0 || columnIndex > maxIndex) {
-            throw new IndexOutOfBoundsException(
-                "The table column index (" + columnIndex + ") is out of bounds (0.." + maxIndex + ").");
-        }
-        return cellElements.get(columnIndex);
     }
 
 }

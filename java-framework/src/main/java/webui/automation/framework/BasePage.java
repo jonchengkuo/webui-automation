@@ -1,6 +1,7 @@
 package webui.automation.framework;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -45,6 +46,14 @@ public class BasePage<T> {
         this.locator = keyElement.getLocator();
     }
 
+    private void assertLocatorNotNull() {
+        if (this.locator == null) {
+            throw new NullPointerException("The locator of this page object is not set." +
+                " You must set it (preferred in your page class constructor) using either" +
+                " the BasePage constructor or the BasePage.setKeyElement method.");
+        }
+    }
+
     public String getName() {
         return this.getClass().getSimpleName();
     }
@@ -75,11 +84,54 @@ public class BasePage<T> {
         return (T) this;
     }*/
 
+
+    /**
+     * Returns whether this web page is available or not within the default page loading timeout,
+     * which is determined and can be configured by {@link WebUI#defaultPageLoadingTimeout}.
+     *
+     * A page is considered available if the browser can use the locator of this page to locate a visible {@link WebElement}.
+     *
+     * @param  timeOutInSeconds  timeout in seconds
+     * @return <code>true</code> if this web page is available within the default page loading timeout;
+     *         <code>false</code> otherwise
+     */
+    public boolean isAvailable() {
+        return isAvailable(WebUI.defaultPageLoadingTimeout);
+    }
+
+    /**
+     * Returns whether this web page is available or not within the specified timeout.
+     * If the specified timeout is 0, it will check the current availability of this web page.
+     * If the specified timeout is greater than 0, it will periodically (every half second)
+     * check the existence of this web page until the specified timeout is reached.
+     *
+     * A page is considered available if the browser can use the locator of this page to locate a visible {@link WebElement}.
+     *
+     * @param  timeOutInSeconds  timeout in seconds
+     * @return <code>true</code> if this web page is available within the specified timeout;
+     *         <code>false</code> otherwise
+     */
+    public boolean isAvailable(int timeOutInSeconds) {
+        assertLocatorNotNull();
+        if (timeOutInSeconds == 0) {
+            WebElement webElement = getBrowser().findElement(this.locator);
+            return webElement.isDisplayed();
+        } else {
+            try {
+                waitUntilAvailable(timeOutInSeconds);
+                return true;
+            } catch (TimeoutException e) {
+                return false;
+            }
+        }
+    }
+
+
     /**
      * Waits until this page becomes available, or until the default page-loading timeout is reached.
      * The default page-loading timeout is determined and can be configured by {@link WebUI#defaultPageLoadingTimeout}.
      *
-     * A page is considered available if the browser can use the locator of the page to locate a visible {@link WebElement}.
+     * A page is considered available if the browser can use the locator of this page to locate a visible {@link WebElement}.
      *
      * @return this page itself (for supporting the fluid interface) 
      * @throws TimeoutException if the page is still not available after the default page-loading timeout expires 
@@ -91,7 +143,7 @@ public class BasePage<T> {
     /**
      * Waits until this page becomes available, or until the specified timeout is reached.
      *
-     * A page is considered available if the browser can use the locator of the page to locate a visible {@link WebElement}.
+     * A page is considered available if the browser can use the locator of this page to locate a visible {@link WebElement}.
      *
      * @param  timeOutInSeconds  time out in seconds
      * @return this page itself (for supporting the fluid interface) 
@@ -99,12 +151,7 @@ public class BasePage<T> {
      */
     @SuppressWarnings("unchecked")
     public T waitUntilAvailable(int timeOutInSeconds) {
-        if (this.locator == null) {
-            throw new NullPointerException("The locator of this page object is not set." +
-                " You must set it (preferred in your page class constructor) using either" +
-                " the BasePage constructor or the BasePage.setKeyElement method.");
-        }
-
+        assertLocatorNotNull();
         String timeOutMessage = "Timed out after " + timeOutInSeconds +
             " seconds in waiting for " + this.getName() + " to become available.";
         getBrowser().waitUntil(

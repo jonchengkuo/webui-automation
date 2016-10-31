@@ -15,7 +15,7 @@ import org.openqa.selenium.WebElement;
 public class ByTBD extends By {
 
     /**
-     * The shared singleton of the {@link ByTBD} class.
+     * The shared, default instance of the {@link ByTBD} class.
      * It is to be passed to a UI element constructor when the locator of the UI element is not yet properly defined.
      *
      * <p><b>Example:</b></p>
@@ -30,14 +30,6 @@ public class ByTBD extends By {
     public static final ByTBD ByTBD = new ByTBD();
 
     /**
-     * A mocked text string.
-     * It is to be returned by a UI element subclass method that returns a String value when the UI element
-     * is given the special {@link ByTBD} locator.
-     * @param actionMessage  Message about an action that is supposed to be performed by a UI element
-     */
-    public static final String MOCKED_STRING_VALUE = "!!MOCKED STRING VALUE!!";
-
-    /**
      * Logs a mocked action.
      * It is to be used by a UI element subclass to log an action instead of performing an actual action.
      * @param actionMessage  Message about an action that is supposed to be performed by a UI element
@@ -46,15 +38,28 @@ public class ByTBD extends By {
         System.out.println("!!MOCKED ACTION: " + actionMessage + "!!");
     }
 
-    @Override
-    public List<WebElement> findElements(SearchContext context) {
-        return EMPTY_WEBELEMENT_LIST;
+    /**
+     * Returns a special, mocked text string.
+     * It is to be returned by a UI element subclass method that returns a String value when the UI element
+     * is given the special {@link ByTBD} locator.
+     */
+    public static String getMockedStringValue() {
+        return MOCKED_STRING_VALUE;
     }
+
+    private static final String MOCKED_STRING_VALUE = "!!MOCKED STRING VALUE!!";
 
     private static final List<WebElement> EMPTY_WEBELEMENT_LIST = new ArrayList<WebElement>();
 
+
     // Private constructor prohibits outside instantiation.
+    // It can be changed to protected if there is really a need for subclassing.
     private ByTBD() {
+    }
+
+    @Override
+    public List<WebElement> findElements(SearchContext context) {
+        return EMPTY_WEBELEMENT_LIST;
     }
 
 }
