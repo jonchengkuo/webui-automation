@@ -9,7 +9,7 @@ import webui.automation.framework.WebUI;
 /**
  * Class for representing and interacting with texts on a web page.
  */
-public class Text extends BaseElement<Text> {
+public class Text extends BaseElement {
 
     /**
      * Constructs an object to represent and interact with a text on a web page.

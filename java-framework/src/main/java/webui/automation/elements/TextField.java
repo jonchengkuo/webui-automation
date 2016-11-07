@@ -11,7 +11,7 @@ import webui.automation.framework.WebUI;
 /**
  * Class for representing and interacting with text fields on a web page.
  */
-public class TextField extends BaseElement<TextField> {
+public class TextField extends BaseElement {
 
     /**
      * Constructs an object to represent and interact with a text field on a web page.

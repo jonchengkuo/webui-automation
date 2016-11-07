@@ -23,7 +23,8 @@ public class TextFieldExample
         browser.open(CHROME).navigateTo(url);
         try {
             TextField textField = new TextField(By.name("q"));
-            textField.waitUntilVisible(timeOut).setText("current movies").submit();
+            textField.waitUntilVisible(timeOut);
+            textField.setText("current movies").submit();
             browser.sleep(3, SECONDS);
         } finally {
             browser.close();
