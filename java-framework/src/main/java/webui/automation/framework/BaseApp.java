@@ -16,37 +16,40 @@ import webui.automation.browser.BrowserType;
  *   import webui.automation.framework.BaseApp;
  *
  *   public class MyApp extends BaseApp {
+ *       final LoginPage loginPage = new LoginPage();
+ *       final MainPage mainPage = new MainPage();
+ *
  *       public MyApp(BrowserType browserType) {
  *           super(browserType, "http://mywebapp");
  *       }
- *       public MainPage login(String user, String password) {
- *           LoginPage loginPage = new LoginPage();
- *           if (loginPage.isAvailable()) {
- *               loginPage.login(user, password);
+ *
+ *       public boolean login(String user, String password) {
+ *           if (this.loginPage.isAvailable()) {
+ *               this.loginPage.login(user, password);
+ *               if (this.mainPage.isAvailable()) {
+ *                   return true;
+ *               } else {
+ *                   // Error: Login failed.
+ *                   return false;
+ *               }
  *           } else {
  *               // Error: Login page not available.
- *           }
- *           ...
- *           MainPage mainPage = new MainPage();
- *           if (mainPage.isAvailable()) {
- *               return mainPage;
- *           } else {
- *               // Error: Login failed.
+ *               return false;
  *           }
  *       }
  *   }
  *
- *   MyApp app = new TabTimeApp(IE);
- *   app.open();
- *   try {
- *       MainPage mainPage = app.login("user", "password");
- *       ....
- *   } finally {
- *       app.close();
+ *   try (MyApp app = new MyApp(BrowserType.IE)) {
+ *       app.open();
+ *       if (app.login("user", "password")) {
+ *           app.mainPage.doSomething();
+ *           ....
+ *       }
+ *       // The browser will be automatically closed after this line.
  *   }
  * </pre> 
  */
-public class BaseApp {
+public class BaseApp implements AutoCloseable {
 
     private Browser browser = WebUI.getDefaultBrowser();
     private BrowserType browserType;
