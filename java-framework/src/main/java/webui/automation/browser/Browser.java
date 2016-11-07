@@ -38,13 +38,14 @@ import com.google.common.base.Function;
  * <p>Example:</p>
  * The following code opens and closes a Chrome browser:
  * <pre>
- *     Browser browser = new Browser();
- *     browser.open(BrowserType.CHROME);
- *     // do something
- *     browser.close();
+ *     try (Browser browser = new Browser()) {
+ *         browser.open(BrowserType.CHROME);
+ *         // Do something.
+ *         // The browser will be automatically closed after this line.
+ *     }
  * </pre>
  */
-public class Browser implements SearchContext, JavascriptExecutor {
+public class Browser implements SearchContext, JavascriptExecutor, AutoCloseable {
 
     protected BrowserType browserType;
 
@@ -92,9 +93,8 @@ public class Browser implements SearchContext, JavascriptExecutor {
      * It does nothing if no web browser is currently opened.
      * <p>
      * Note: After calling this method, this {@link Browser} instance will always enter the non-opened state.
-     * @return this browser instance
      */
-    public Browser close() {
+    public void close() {
         if (this.webDriver != null) {
             try {
                 this.webDriver.quit();
@@ -105,7 +105,6 @@ public class Browser implements SearchContext, JavascriptExecutor {
                 this.browserType = null;
             }
         }
-        return this;
     }
 
     /**
