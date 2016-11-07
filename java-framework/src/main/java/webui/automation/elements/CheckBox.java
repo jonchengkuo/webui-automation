@@ -11,7 +11,7 @@ import webui.automation.framework.WebUI;
 /**
  * Class for representing and interacting with check boxes on a web page.
  */
-public class CheckBox extends BaseElement<CheckBox> {
+public class CheckBox extends BaseElement {
 
     /**
      * Constructs an object to represent and interact with a check box on a web page.
@@ -33,10 +33,9 @@ public class CheckBox extends BaseElement<CheckBox> {
      * If the check box does not exist, this method will keep waiting until it appears or until
      * the {@link WebUI#defaultImplicitWaitTimeout default implicit wait timeout} is reached.  
      *
-     * @return this check box itself (for supporting the fluid interface) 
      * @throws NoSuchElementException if this check box still does not exist after the default implicit timeout is reached
      */
-    public CheckBox check() {
+    public void check() {
         if (this.isLocatedByTBD()) {
             ByTBD.log(this.getName() + ".check()");
         } else {
@@ -46,7 +45,6 @@ public class CheckBox extends BaseElement<CheckBox> {
                 webElement.click();
             }
         }
-        return this;
     }
 
     /**

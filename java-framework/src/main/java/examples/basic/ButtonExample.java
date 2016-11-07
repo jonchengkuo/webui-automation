@@ -23,7 +23,8 @@ public class ButtonExample
         browser.open(CHROME).navigateTo(url);
         try {
             Button button = new Button(By.id("id"));
-            button.waitUntilVisible(timeOut).click();
+            button.waitUntilVisible(timeOut);
+            button.click();
 
             System.out.println( "Hello World!" );
         } finally {

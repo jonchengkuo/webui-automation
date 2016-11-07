@@ -21,14 +21,14 @@ import webui.automation.browser.Browser;
  * <pre>
  *   import webui.automation.framework.BaseElement;
  *
- *   public class Button extends BaseElement<Button> {
+ *   public class Button extends BaseElement {
  *       public void click() {
  *           ...
  *       }
  *   }
  * </pre> 
  */
-public class BaseElement<T> {
+public class BaseElement {
 
     private Browser browser = WebUI.getDefaultBrowser();
     private By locator;
@@ -80,15 +80,12 @@ public class BaseElement<T> {
     // Comment out this method until we want the framework to support multiple Browser instances.
     /*
      * Sets the {@link Browser} instance used by this UI element.
-     * @return this UI element itself (for supporting the fluid interface) 
      *
-    @SuppressWarnings("unchecked")
-    private T setBrowser(Browser browser) {
+    private void setBrowser(Browser browser) {
         if (browser == null) {
             throw new NullPointerException("The given browser object is null.");
         }
         this.browser = browser;
-        return (T) this;
     }*/
 
 
@@ -187,11 +184,10 @@ public class BaseElement<T> {
      * By default, a UI element is considered exist if it is present and visible.
      * A subclass may override this default behavior by calling the {@link #setExpectVisible} method.
      *
-     * @return this UI element itself (for supporting the fluid interface) 
      * @throws TimeoutException if this UI element still does not exist after the default implicit wait timeout is reached 
      */
-    public T waitUntilExists() {
-        return this.waitUntilExists(WebUI.defaultImplicitWaitTimeout);
+    public void waitUntilExists() {
+        this.waitUntilExists(WebUI.defaultImplicitWaitTimeout);
     }
 
     /**
@@ -201,14 +197,13 @@ public class BaseElement<T> {
      * A subclass may override this default behavior by calling the {@link #setExpectVisible} method.
      *
      * @param  timeOutInSeconds  timeout in seconds
-     * @return this UI element itself (for supporting the fluid interface) 
      * @throws TimeoutException if this UI element still does not exist after the specified timeout is reached 
      */
-    public T waitUntilExists(int timeOutInSeconds) {
+    public void waitUntilExists(int timeOutInSeconds) {
         if (this.expectVisible) {
-            return waitUntilVisible(timeOutInSeconds);
+            waitUntilVisible(timeOutInSeconds);
         } else {
-            return waitUntilPresent(timeOutInSeconds);
+            waitUntilPresent(timeOutInSeconds);
         }
     }
 
@@ -216,51 +211,42 @@ public class BaseElement<T> {
      * Waits until this UI element becomes present, or until the specified timeout is reached.
      *
      * @param  timeOutInSeconds  time out in seconds
-     * @return this UI element itself (for supporting the fluid interface) 
      * @throws TimeoutException if this UI element is still not present after the specified timeout is reached  
      */
-    @SuppressWarnings("unchecked")
-    public T waitUntilPresent(int timeOutInSeconds) {
+    public void waitUntilPresent(int timeOutInSeconds) {
         String timeOutMessage = "Timed out after " + timeOutInSeconds +
             " seconds in waiting for " + this.getName() + " to become present.";
         getBrowser().waitUntil(
             ExpectedConditions.presenceOfElementLocated(this.locator),
             timeOutInSeconds, timeOutMessage);
-        return (T) this;
     }
 
     /**
      * Waits until this UI element becomes present and visible, or until the specified timeout is reached.
      *
      * @param  timeOutInSeconds  time out in seconds
-     * @return this UI element itself (for supporting the fluid interface) 
      * @throws TimeoutException if this UI element is still not visible after the specified timeout is reached  
      */
-    @SuppressWarnings("unchecked")
-    public T waitUntilVisible(int timeOutInSeconds) {
+    public void waitUntilVisible(int timeOutInSeconds) {
         String timeOutMessage = "Timed out after " + timeOutInSeconds +
             " seconds in waiting for " + this.getName() + " to become visible.";
         getBrowser().waitUntil(
             ExpectedConditions.visibilityOfElementLocated(this.locator),
             timeOutInSeconds, timeOutMessage);
-        return (T) this;
     }
 
     /**
      * Waits until this UI element becomes invisible, or until the specified timeout is reached.
      *
      * @param  timeOutInSeconds  time out in seconds
-     * @return this UI element itself (for supporting the fluid interface) 
      * @throws TimeoutException if this UI element is still visible after the specified timeout is reached  
      */
-    @SuppressWarnings("unchecked")
-    public T waitUntilInvisible(int timeOutInSeconds) {
+    public void waitUntilInvisible(int timeOutInSeconds) {
         String timeOutMessage = "Expecting " + this.getName() +
             " to disappear but it is still visible after " + timeOutInSeconds + " seconds.";
         getBrowser().waitUntil(
             ExpectedConditions.invisibilityOfElementLocated(this.locator),
             timeOutInSeconds, timeOutMessage);
-        return (T) this;
     }
 
 }

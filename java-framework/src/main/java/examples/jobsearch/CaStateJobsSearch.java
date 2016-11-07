@@ -291,7 +291,7 @@ public class CaStateJobsSearch {
         }
     }
 
-    static class JobDescriptionSection extends BaseElement<JobDescriptionSection> {
+    static class JobDescriptionSection extends BaseElement {
         public JobDescriptionSection() {
             super(By.id("pnlJobDescription"));
         }

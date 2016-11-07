@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Class for representing and interacting with tables on a web page.
  */
-public class Table extends ContainerElement<Table> {
+public class Table extends ContainerElement {
 
     /**
      * Constructs an object to represent and interact with a table on a web page.
