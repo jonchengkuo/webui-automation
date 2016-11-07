@@ -39,7 +39,7 @@ public class BasePage<T> {
         this.locator = locator;
     }
 
-    protected void setKeyElement(BaseElement<?> keyElement) {
+    protected void setKeyElement(BaseElement keyElement) {
         if (keyElement == null) {
             throw new NullPointerException("The key element given to the page is null.");
         }

@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 
 import webui.automation.framework.BaseElement;
 
-public class ContainerElement<T> extends BaseElement<T> implements SearchContext {
+public class ContainerElement extends BaseElement implements SearchContext {
 
     public ContainerElement(By locator) {
         super(locator);

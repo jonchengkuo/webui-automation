@@ -10,7 +10,7 @@ import webui.automation.framework.WebUI;
 /**
  * Class for representing and interacting with text links on a web page.
  */
-public class TextLink extends BaseElement<TextLink> {
+public class TextLink extends BaseElement {
 
     /**
      * Constructs an object to represent and interact with a text link on a web page.
@@ -29,17 +29,15 @@ public class TextLink extends BaseElement<TextLink> {
      * If the text link does not exist, this method will keep waiting until it appears or until
      * the {@link WebUI#defaultImplicitWaitTimeout default implicit wait timeout} is reached.  
      *
-     * @return this text link itself (for supporting the fluid interface) 
      * @throws NoSuchElementException if this text link still does not exist after the default implicit timeout is reached
      */
-    public TextLink click () {
+    public void click () {
         if (this.isLocatedByTBD()) {
             ByTBD.log(this.getName() + ".click()");
         } else {
             // Get the web element with the default implicit timeout and then click it.
             getWebElement().click();
         }
-        return this;
     }
 
     /**

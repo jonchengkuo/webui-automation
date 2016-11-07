@@ -13,7 +13,7 @@ import webui.automation.framework.WebUI;
 /**
  * Class for representing and interacting with buttons on a web page.
  */
-public class Button extends BaseElement<Button> {
+public class Button extends BaseElement {
 
     /**
      * Constructs an object to represent and interact with a button on a web page.
@@ -31,17 +31,15 @@ public class Button extends BaseElement<Button> {
      * If the button does not exist, this method will keep waiting until it appears or until
      * the {@link WebUI#defaultImplicitWaitTimeout default implicit wait timeout} is reached.  
      *
-     * @return this button itself (for supporting the fluid interface) 
      * @throws NoSuchElementException if this button still does not exist after the default implicit timeout is reached
      */
-    public Button click() {
+    public void click() {
         if (this.isLocatedByTBD()) {
             ByTBD.log(this.getName() + ".click()");
         } else {
             // Get the web element with the default implicit timeout and then click it.
             getWebElement().click();
         }
-        return this;
     }
 
     /**
@@ -73,16 +71,14 @@ public class Button extends BaseElement<Button> {
      * Waits until this button becomes clickable, or until the specified timeout is reached.
      *
      * @param  timeOutInSeconds  time out in seconds
-     * @return this button itself (for supporting the fluid interface) 
      * @throws TimeoutException if this button is still not clickable after the specified timeout is reached  
      */
-    public Button waitUntilClickable(int timeOutInSeconds) {
+    public void waitUntilClickable(int timeOutInSeconds) {
         String timeOutMessage = "Timed out after " + timeOutInSeconds +
             " seconds in waiting for " + this.getName() + " to become clickable.";
         getBrowser().waitUntil(
             ExpectedConditions.elementToBeClickable(getLocator()),
             timeOutInSeconds, timeOutMessage);
-        return this;
     }
 
 }
