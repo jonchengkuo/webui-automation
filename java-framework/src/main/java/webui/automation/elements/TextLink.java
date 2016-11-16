@@ -2,6 +2,7 @@ package webui.automation.elements;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 
 import webui.automation.framework.BaseElement;
 import webui.automation.framework.ByTBD;
@@ -13,15 +14,24 @@ import webui.automation.framework.WebUI;
 public class TextLink extends BaseElement {
 
     /**
-     * Constructs an object to represent and interact with a text link on a web page.
+     * Constructs an object to represent and interact with a hypertext link on a web page.
      * @param  locator  The {@link By} locator for locating this text link;
-     *                  it should select the HTML {@code <a>} tag of the text link.
+     *                  it should select the HTML {@code <a href="...">} tag of the text link.
      * @throws NullPointerException if the specified <code>locator</code> is <code>null</code>
      */
     public TextLink(By locator) {
         super(locator);
     }
 
+    /**
+     * Constructs an object to represent and interact with a hypertext link on a web page.
+     * @param  webElement  The {@link WebElement} of this text link;
+     *                     it should refer to an HTML {@code <a href="...">} tag of a page.
+     * @throws NullPointerException if the specified <code>webElement</code> is <code>null</code>
+     */
+    public TextLink(WebElement webElement) {
+        super(webElement);
+    }
 
     /**
      * Simulates the user interaction of clicking this text link on UI.

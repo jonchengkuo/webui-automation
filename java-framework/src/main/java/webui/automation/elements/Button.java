@@ -17,12 +17,22 @@ public class Button extends BaseElement {
 
     /**
      * Constructs an object to represent and interact with a button on a web page.
-     * @param  locator  The {@link By} locator for locating this button;
+     * @param  locator  The {@link By} locator for locating the {@link WebElement} of this button;
      *                  it should select the HTML {@code <input type="button">} tag of the button.
      * @throws NullPointerException if the specified <code>locator</code> is <code>null</code>
      */
     public Button(By locator) {
         super(locator);
+    }
+
+    /**
+     * Constructs an object to represent and interact with a button on a web page.
+     * @param  webElement  The {@link WebElement} of this button;
+     *                     it should refer to an HTML {@code <input type="button">} tag of a page.
+     * @throws NullPointerException if the specified <code>webElement</code> is <code>null</code>
+     */
+    public Button(WebElement webElement) {
+        super(webElement);
     }
 
     /**
@@ -74,11 +84,16 @@ public class Button extends BaseElement {
      * @throws TimeoutException if this button is still not clickable after the specified timeout is reached  
      */
     public void waitUntilClickable(int timeOutInSeconds) {
-        String timeOutMessage = "Timed out after " + timeOutInSeconds +
-            " seconds in waiting for " + this.getName() + " to become clickable.";
-        getBrowser().waitUntil(
-            ExpectedConditions.elementToBeClickable(getLocator()),
-            timeOutInSeconds, timeOutMessage);
+        if (getLocator() == null) {
+            // TODO: Implement waiting for a WebElement to become clickable (rarely needed).
+            throw new RuntimeException("This method is not yet implemented for a UI element that is tied to a particular WebElement.");
+        } else {
+            String timeOutMessage = "Timed out after " + timeOutInSeconds +
+                    " seconds in waiting for " + this.getName() + " to become clickable.";
+            getBrowser().waitUntil(
+                    ExpectedConditions.elementToBeClickable(getLocator()),
+                    timeOutInSeconds, timeOutMessage);
+        }
     }
 
 }

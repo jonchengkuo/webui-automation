@@ -14,6 +14,14 @@ public class ContainerElement extends BaseElement implements SearchContext {
         super(locator);
     }
 
+    /**
+     * @param  webElement  The {@link WebElement} of this container element.
+     * @throws NullPointerException if the specified <code>webElement</code> is <code>null</code>
+     */
+    public ContainerElement(WebElement webElement) {
+        super(webElement);
+    }
+
     ////// Implements the SearchContext interface.  //////
     
     public WebElement findElement(By by) {

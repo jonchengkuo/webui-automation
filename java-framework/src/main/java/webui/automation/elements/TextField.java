@@ -9,12 +9,12 @@ import webui.automation.framework.ByTBD;
 import webui.automation.framework.WebUI;
 
 /**
- * Class for representing and interacting with text fields on a web page.
+ * Class for representing and interacting with text fields (or called text boxes) on a web page.
  */
 public class TextField extends BaseElement {
 
     /**
-     * Constructs an object to represent and interact with a text field on a web page.
+     * Constructs an object to represent and interact with a text field (or called a text box) on a web page.
      *
      * Note that the label of a text field is outside the text field element and should be handled separately.
      *
@@ -24,6 +24,16 @@ public class TextField extends BaseElement {
      */
     public TextField(By locator) {
         super(locator);
+    }
+
+    /**
+     * Constructs an object to represent and interact with a text field (or called a text box) on a web page.
+     * @param  webElement  The {@link WebElement} of this text field;
+     *                     it should refer to an HTML {@code <input type="text">} tag of a page.
+     * @throws NullPointerException if the specified <code>webElement</code> is <code>null</code>
+     */
+    public TextField(WebElement webElement) {
+        super(webElement);
     }
 
     /**

@@ -12,30 +12,69 @@ import com.google.common.base.Function;
 import webui.automation.browser.Browser;
 
 /**
- * Base class for representing and interacting with UI elements on a web page.
- * It provides common and utility methods for subclasses.
- * A subclass should be defined for each specific UI element type (e.g., a button)
- * to simulate its specific UI behaviors (e.g., clicking a button).
+ * Base class for representing and interacting with UI elements (or called UI controls) shown on a web page.
+ * It provides common utility methods for subclasses.
+ * A subclass should be defined for each specific UI element type (e.g., buttons, check boxes, etc.)
+ * to model specific UI behaviors (e.g., clicking a button or checking a check box).
+ *
+ * <P>Every UI element shown on a web page is defined by an HTML element, which is defined
+ * by a pair of HTML start and end tags.</P>
+ *
+ * <P>Instances of UI elements can be created in two ways: with a {@link By} locator or with a {@link WebElement}.
+ * A locator is a mechanism by which the HTML element of a UI element can be located.
+ * A WebElement represents a located HTML element.
+ * Because every UI element shown on a web page is defined by a particular HTML element,
+ * this framework sometimes uses the term <em>UI element</em> and <em>HTML element</em> interchangeably.</P>
+ *
+ * For a UI element created with a {@link By} locator, every time your code interacts with the UI element
+ * (by calling its public methods), it will always try to locate its HTML element on the web page with its locator.
+ * This design is less efficient because it does not cache a previously located HTML element (i.e.,
+ * it does not reuse a previously available WebElement object). However, this design does guarantee that
+ * it will always interact with the current, up-to-date web page. From the framework's perspective, it has no way
+ * to know whether a previously located HTML element still exists or not.</P>
+ *
+ * <P>On the other hand a UI element created with a {@link WebElement} does not have a locator.
+ * It will assume that the WebElement given to it is always available and will use it for any UI interaction.
+ * This design is more efficient, but it relies on the caller (i.e., your code) to properly manage the
+ * life-cycle of a UI element and its WebElement.
+ * It is designed to be used as a transient UI element that lives for a short period of time.</P>
  *
  * <p><b>Example:</b></p>
  * <pre>
+ *   import org.openqa.selenium.By;
+ *   import org.openqa.selenium.WebElement;
  *   import webui.automation.framework.BaseElement;
  *
  *   public class Button extends BaseElement {
+ *       public Button(By locator) {
+ *           super(locator);
+ *       }
+ *       public Button(WebElement webElement) {
+ *           super(webElement);
+ *       }
  *       public void click() {
  *           ...
  *       }
  *   }
+ *
+ *
+ *   Button button1 = new Button(By.id("buttonId1"));
+ *
+ *   WebElement button2Element = browser.findElement(By.id("buttonId2"));
+ *   Button button2 = new Button(button2Element);
  * </pre> 
  */
 public class BaseElement {
 
-    private Browser browser = WebUI.getDefaultBrowser();
+    private Browser browser;
     private By locator;
     private boolean expectVisible = true;
 
+    private WebElement webElement;
+
     /**
      * Constructs the base object of a concrete UI element object that represents a specific UI element on a web page.
+     * The given <code>locator</code> will be used to locate the {@link WebElement} of the UI element.
      * @param  locator  The {@link By} locator for locating the UI element on a web page.
      * @throws NullPointerException if the specified <code>locator</code> is <code>null</code>
      */
@@ -44,16 +83,47 @@ public class BaseElement {
             throw new NullPointerException("The locator given to the UI element is null.");
         }
         this.locator = locator;
+        this.browser = WebUI.getDefaultBrowser();
+    }
+
+    /**
+     * Constructs the base object of a concrete UI element object that represents a specific UI element on a web page.
+     * This UI element is directly tied to the given {@link WebElement} located by other means.
+     * @param  webElement  The {@link WebElement} of the UI element on a web page.
+     * @throws NullPointerException if the specified <code>webElement</code> is <code>null</code>
+     */
+    protected BaseElement(WebElement webElement) {
+        if (webElement == null) {
+            throw new NullPointerException("The WebElement given to the UI element is null.");
+        }
+        this.webElement = webElement;
     }
 
     protected void setExpectVisible(boolean expectVisible) {
         this.expectVisible = expectVisible;
     }
 
+    /**
+     * Returns the name of this UI element.
+     * It is default to the simple class name of this UI element, such as "Button", "CheckBox", etc.,
+     * appended with the string representation of either the locator (if this UI element has a locator),
+     * or the {@link WebElement} given to the constructor of this UI element.
+     * @return the name of this UI element
+     */
     public String getName() {
-        return this.getClass().getSimpleName() + "(" + this.locator.toString() + ")";
+        if (this.locator == null) {
+            return this.getClass().getSimpleName() + "(" + this.webElement.toString() + ")";
+        } else {
+            return this.getClass().getSimpleName() + "(" + this.locator.toString() + ")";
+        }
     }
 
+    /**
+     * Returns the {@link By} locator of this UI element.
+     * If this UI element is created with a {@link WebElement} instead of a locator, this method will return <code>null</code>.
+     * @return the {@link By} locator of this UI element;
+     *         <code>null</code> if this UI element is created with a {@link WebElement} instead of a locator
+     */
     public By getLocator() {
         return this.locator;
     }
@@ -64,17 +134,27 @@ public class BaseElement {
      *         <code>false</code> otherwise
      */
     protected boolean isLocatedByTBD() {
-        return (this.locator instanceof ByTBD);
+        if (this.locator == null) {
+            return false;
+        } else {
+            return (this.locator instanceof ByTBD);
+        }
     }
 
     /**
      * Returns the {@link Browser} instance used by this UI element.
      * It is default to the {@link Browser} instance returned by {@link WebUI#getDefaultBrowser}
-     * when this UI element is created.
+     * when this UI element is created with a {@link By} locator.
+     * If this UI element is created with a {@link WebElement}, this method will throw an {@link IllegalStateException}.
      * @return the {@link Browser} instance used by this UI element
+     * @throws IllegalStateException if this UI element is created with a {@link WebElement}
      */
     public Browser getBrowser() {
-        return this.browser;
+        if (this.browser == null) {
+            throw new IllegalStateException("No browser is available for this " + getName() + " because it was created with a WebElement.");
+        } else {
+            return this.browser;
+        }
     }
 
     // Comment out this method until we want the framework to support multiple Browser instances.
@@ -112,6 +192,11 @@ public class BaseElement {
      * @throws NoSuchElementException if this UI element still does not exist after the specified timeout is reached
      */
     public WebElement getWebElement(int timeOutInSeconds) {
+        if (this.webElement != null) {
+            // This UI element is already tied to a particular WebElement; just return it.
+            return this.webElement;
+        }
+
         WebElement webElement = null;
         if (timeOutInSeconds == 0) {
             webElement = getBrowser().findElement(this.locator);
@@ -214,6 +299,10 @@ public class BaseElement {
      * @throws TimeoutException if this UI element is still not present after the specified timeout is reached  
      */
     public void waitUntilPresent(int timeOutInSeconds) {
+        if (this.webElement != null) {
+            // This UI element is already tied to a particular WebElement; there is no need to wait.
+            return;
+        }
         String timeOutMessage = "Timed out after " + timeOutInSeconds +
             " seconds in waiting for " + this.getName() + " to become present.";
         getBrowser().waitUntil(
@@ -228,6 +317,10 @@ public class BaseElement {
      * @throws TimeoutException if this UI element is still not visible after the specified timeout is reached  
      */
     public void waitUntilVisible(int timeOutInSeconds) {
+        if (this.webElement != null) {
+            // TODO: Implement waiting for a WebElement to become visible (rarely needed).
+            throw new RuntimeException("This method is not yet implemented for a UI element that is tied to a particular WebElement.");
+        }
         String timeOutMessage = "Timed out after " + timeOutInSeconds +
             " seconds in waiting for " + this.getName() + " to become visible.";
         getBrowser().waitUntil(
@@ -242,6 +335,10 @@ public class BaseElement {
      * @throws TimeoutException if this UI element is still visible after the specified timeout is reached  
      */
     public void waitUntilInvisible(int timeOutInSeconds) {
+        if (this.webElement != null) {
+            // TODO: Implement waiting for a WebElement to become invisible (rarely needed).
+            throw new RuntimeException("This method is not yet implemented for a UI element that is tied to a particular WebElement.");
+        }
         String timeOutMessage = "Expecting " + this.getName() +
             " to disappear but it is still visible after " + timeOutInSeconds + " seconds.";
         getBrowser().waitUntil(
