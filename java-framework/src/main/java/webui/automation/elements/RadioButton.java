@@ -2,6 +2,7 @@ package webui.automation.elements;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 
 import webui.automation.framework.BaseElement;
 import webui.automation.framework.ByTBD;
@@ -24,6 +25,16 @@ public class RadioButton extends BaseElement {
      */
     public RadioButton (By locator) {
         super(locator);
+    }
+
+    /**
+     * Constructs an object to represent and interact with a radio button on a web page.
+     * @param  webElement  The {@link WebElement} of this radio button;
+     *                     it should refer to an HTML {@code <input type="radio">} tag of a page.
+     * @throws NullPointerException if the specified <code>webElement</code> is <code>null</code>
+     */
+    public RadioButton(WebElement webElement) {
+        super(webElement);
     }
 
     /**

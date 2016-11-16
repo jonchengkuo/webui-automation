@@ -24,6 +24,15 @@ public class Table extends ContainerElement {
         super(locator);
     }
 
+    /**
+     * Constructs an object to represent and interact with a table on a web page.
+     * @param  webElement  The {@link WebElement} of this table;
+     *                     it should refer to an HTML {@code <table>} tag of a page.
+     * @throws NullPointerException if the specified <code>webElement</code> is <code>null</code>
+     */
+    public Table(WebElement webElement) {
+        super(webElement);
+    }
 
     public int getRowCount() {
         return getRowElements().size();

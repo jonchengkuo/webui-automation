@@ -28,6 +28,16 @@ public class CheckBox extends BaseElement {
     }
 
     /**
+     * Constructs an object to represent and interact with a check box on a web page.
+     * @param  webElement  The {@link WebElement} of this check box;
+     *                     it should refer to an HTML {@code <input type="checkbox">} tag of a page.
+     * @throws NullPointerException if the specified <code>webElement</code> is <code>null</code>
+     */
+    public CheckBox(WebElement webElement) {
+        super(webElement);
+    }
+
+    /**
      * Simulates the user interaction of checking this check box.
      *
      * If the check box does not exist, this method will keep waiting until it appears or until

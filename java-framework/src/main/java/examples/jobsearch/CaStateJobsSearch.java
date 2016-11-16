@@ -45,8 +45,8 @@ public class CaStateJobsSearch {
     public static void main( String[] args ) {
 
         String[] jobTitles = new String[] {
-            //"SYSTEMS SOFTWARE SPECIALIST I (TECHNICAL)",
-            "SYSTEMS SOFTWARE SPECIALIST II (TECHNICAL)",
+            "SYSTEMS SOFTWARE SPECIALIST I (TECHNICAL)"
+            //"SYSTEMS SOFTWARE SPECIALIST II (TECHNICAL)",
             //"SYSTEMS SOFTWARE SPECIALIST III (TECHNICAL)",
             //"STAFF INFORMATION SYSTEMS ANALYST (SPECIALIST)",
             //"SENIOR INFORMATION SYSTEMS ANALYST (SPECIALIST)",

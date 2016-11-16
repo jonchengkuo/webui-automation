@@ -2,6 +2,7 @@ package webui.automation.elements;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 
 import webui.automation.framework.BaseElement;
 import webui.automation.framework.WebUI;
@@ -21,6 +22,16 @@ public class Text extends BaseElement {
      */
     public Text(By locator) {
         super(locator);
+    }
+
+    /**
+     * Constructs an object to represent and interact with a text on a web page.
+     * @param  webElement  The {@link WebElement} of this text;
+     *                     it should refer to the HTML tag that contains the text.
+     * @throws NullPointerException if the specified <code>webElement</code> is <code>null</code>
+     */
+    public Text(WebElement webElement) {
+        super(webElement);
     }
 
     /**
