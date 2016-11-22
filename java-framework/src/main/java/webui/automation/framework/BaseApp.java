@@ -2,9 +2,6 @@ package webui.automation.framework;
 
 import org.openqa.selenium.WebDriverException;
 
-import webui.automation.browser.Browser;
-import webui.automation.browser.BrowserType;
-
 /**
  * Base class for representing and interacting with a web application using the page object model.
  * A subclass should be defined for each specific web application

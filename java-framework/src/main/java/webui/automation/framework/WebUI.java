@@ -1,7 +1,5 @@
 package webui.automation.framework;
 
-import webui.automation.browser.Browser;
-
 public class WebUI {
 
     private static Browser defaultBrowser = new Browser();

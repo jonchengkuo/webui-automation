@@ -1,12 +1,12 @@
 package examples.basic;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static webui.automation.browser.BrowserType.FIREFOX;
+import static webui.automation.framework.BrowserType.FIREFOX;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import webui.automation.browser.Browser;
+import webui.automation.framework.Browser;
 
 /**
  * This example tests the {@link Browser} class.

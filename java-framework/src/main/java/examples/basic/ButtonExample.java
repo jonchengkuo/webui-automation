@@ -1,11 +1,11 @@
 package examples.basic;
 
-import static webui.automation.browser.BrowserType.CHROME;
+import static webui.automation.framework.BrowserType.CHROME;
 
 import org.openqa.selenium.By;
 
-import webui.automation.browser.Browser;
 import webui.automation.elements.Button;
+import webui.automation.framework.Browser;
 import webui.automation.framework.WebUI;
 
 /**
