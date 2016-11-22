@@ -1,7 +1,7 @@
 package examples.jobsearch;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static webui.automation.browser.BrowserType.FIREFOX;
+import static webui.automation.framework.BrowserType.FIREFOX;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,10 +16,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.NoSuchElementException;
 
-import webui.automation.browser.Browser;
 import webui.automation.elements.*;
 import webui.automation.framework.BaseElement;
 import webui.automation.framework.BasePage;
+import webui.automation.framework.Browser;
 import webui.automation.framework.WebUI;
 
 /**

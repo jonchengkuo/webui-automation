@@ -9,8 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.google.common.base.Function;
 
-import webui.automation.browser.Browser;
-
 /**
  * Base class for representing and interacting with UI elements (or called UI controls) shown on a web page.
  * It provides common utility methods for subclasses.

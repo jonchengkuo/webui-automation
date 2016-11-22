@@ -6,8 +6,6 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import webui.automation.browser.Browser;
-
 /**
  * Base class for representing and interacting with a web page using the page object model.
  * A subclass should be defined for each specific web page

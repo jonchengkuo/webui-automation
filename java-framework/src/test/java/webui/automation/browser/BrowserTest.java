@@ -18,8 +18,8 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import webui.automation.browser.Browser;
-import webui.automation.browser.BrowserType;
+import webui.automation.framework.Browser;
+import webui.automation.framework.BrowserType;
 
 @RunWith(Parameterized.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

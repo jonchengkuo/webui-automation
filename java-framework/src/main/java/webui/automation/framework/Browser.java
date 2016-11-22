@@ -1,4 +1,4 @@
-package webui.automation.browser;
+package webui.automation.framework;
 
 import java.util.ArrayList;
 import java.util.List;
