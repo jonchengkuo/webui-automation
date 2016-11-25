@@ -40,6 +40,7 @@ public class ElementFactory {
     /**
      * Creates an object to represent a button on a web page.
      * @param  locator  The {@link By} locator for locating the button on a web page.
+     * @return the created {@link Button} element
      */
     public static Button createButton(By locator) {
         return new Button(locator);
@@ -48,6 +49,7 @@ public class ElementFactory {
     /**
      * Creates an object to represent a check box on a web page.
      * @param  locator  The {@link By} locator for locating the check box on a web page.
+     * @return the created {@link CheckBox} element
      */
     public static CheckBox createCheckBox(By locator) {
         return new CheckBox(locator);
@@ -56,8 +58,8 @@ public class ElementFactory {
     /**
      * Creates an object to represent a radio button on a web page.
      * @param  locator  The {@link By} locator for locating the radio button on a web page.
+     * @return the created {@link RadioButton} element
      */
-
     public static RadioButton createRadioButton(By locator) {
         return new RadioButton(locator);
     }
@@ -65,8 +67,8 @@ public class ElementFactory {
     /**
      * Creates an object to represent a table on a web page.
      * @param  locator  The {@link By} locator for locating the table on a web page.
+     * @return the created {@link Table} element
      */
-
     public static Table createTable(By locator) {
         return new Table(locator);
     }
@@ -74,17 +76,17 @@ public class ElementFactory {
     /**
      * Creates an object to represent a text on a web page.
      * @param  locator  The {@link By} locator for locating the text on a web page.
+     * @return the created {@link Text} element
      */
-
     public static Text createText(By locator) {
         return new Text(locator);
     }
 
     /**
-     * Creates an object to represent a text field on a web page.
+     * Creates an object to represent a text field (or called text box) on a web page.
      * @param  locator  The {@link By} locator for locating the text field on a web page.
+     * @return the created {@link TextField} element
      */
-
     public static TextField createTextField(By locator) {
         return new TextField(locator);
     }
@@ -92,8 +94,8 @@ public class ElementFactory {
     /**
      * Creates an object to represent a text link on a web page.
      * @param  locator  The {@link By} locator for locating the text link on a web page.
+     * @return the created {@link TextLink} element
      */
-
     public static TextLink createTextLink(By locator) {
         return new TextLink(locator);
     }

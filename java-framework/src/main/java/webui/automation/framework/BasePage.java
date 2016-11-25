@@ -22,7 +22,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  *   }
  * </pre> 
  */
-public class BasePage<T> {
+public class BasePage<T extends BasePage<T>> {
 
     private Browser browser = WebUI.getDefaultBrowser();
     private By locator;
@@ -85,11 +85,10 @@ public class BasePage<T> {
 
     /**
      * Returns whether this web page is available or not within the default page loading timeout,
-     * which is determined and can be configured by {@link WebUI#defaultPageLoadingTimeout}.
+     * which is specified and can be configured by {@link WebUI#defaultPageLoadingTimeout}.
      *
      * A page is considered available if the browser can use the locator of this page to locate a visible {@link WebElement}.
      *
-     * @param  timeOutInSeconds  timeout in seconds
      * @return <code>true</code> if this web page is available within the default page loading timeout;
      *         <code>false</code> otherwise
      */

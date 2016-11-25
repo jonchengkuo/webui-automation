@@ -79,18 +79,20 @@ public class Button extends BaseElement {
 
     /**
      * Waits until this button becomes clickable, or until the specified timeout is reached.
+     * It returns the located clickable {@link WebElement}.
      *
      * @param  timeOutInSeconds  time out in seconds
+     * @return the located clickable {@link WebElement}
      * @throws TimeoutException if this button is still not clickable after the specified timeout is reached  
      */
-    public void waitUntilClickable(int timeOutInSeconds) {
+    public WebElement waitUntilClickable(int timeOutInSeconds) {
         if (getLocator() == null) {
             // TODO: Implement waiting for a WebElement to become clickable (rarely needed).
             throw new RuntimeException("This method is not yet implemented for a UI element that is tied to a particular WebElement.");
         } else {
             String timeOutMessage = "Timed out after " + timeOutInSeconds +
                     " seconds in waiting for " + this.getName() + " to become clickable.";
-            getBrowser().waitUntil(
+            return getBrowser().waitUntil(
                     ExpectedConditions.elementToBeClickable(getLocator()),
                     timeOutInSeconds, timeOutMessage);
         }
