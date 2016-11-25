@@ -291,37 +291,42 @@ public class BaseElement {
     }
 
     /**
-     * Waits until this UI element becomes present, or until the specified timeout is reached.
+     * Waits until this UI element becomes present (i.e., its HTML element is present in the DOM tree),
+     * or until the specified timeout is reached.
+     * It returns the located {@link WebElement}.
      *
      * @param  timeOutInSeconds  time out in seconds
+     * @return the located {@link WebElement}
      * @throws TimeoutException if this UI element is still not present after the specified timeout is reached  
      */
-    public void waitUntilPresent(int timeOutInSeconds) {
+    public WebElement waitUntilPresent(int timeOutInSeconds) {
         if (this.webElement != null) {
             // This UI element is already tied to a particular WebElement; there is no need to wait.
-            return;
+            return this.webElement;
         }
         String timeOutMessage = "Timed out after " + timeOutInSeconds +
             " seconds in waiting for " + this.getName() + " to become present.";
-        getBrowser().waitUntil(
+        return getBrowser().waitUntil(
             ExpectedConditions.presenceOfElementLocated(this.locator),
             timeOutInSeconds, timeOutMessage);
     }
 
     /**
-     * Waits until this UI element becomes present and visible, or until the specified timeout is reached.
+     * Waits until this UI element becomes visible, or until the specified timeout is reached.
+     * It returns the located {@link WebElement}.
      *
      * @param  timeOutInSeconds  time out in seconds
+     * @return the located {@link WebElement}
      * @throws TimeoutException if this UI element is still not visible after the specified timeout is reached  
      */
-    public void waitUntilVisible(int timeOutInSeconds) {
+    public WebElement waitUntilVisible(int timeOutInSeconds) {
         if (this.webElement != null) {
             // TODO: Implement waiting for a WebElement to become visible (rarely needed).
             throw new RuntimeException("This method is not yet implemented for a UI element that is tied to a particular WebElement.");
         }
         String timeOutMessage = "Timed out after " + timeOutInSeconds +
             " seconds in waiting for " + this.getName() + " to become visible.";
-        getBrowser().waitUntil(
+        return getBrowser().waitUntil(
             ExpectedConditions.visibilityOfElementLocated(this.locator),
             timeOutInSeconds, timeOutMessage);
     }
@@ -330,16 +335,17 @@ public class BaseElement {
      * Waits until this UI element becomes invisible, or until the specified timeout is reached.
      *
      * @param  timeOutInSeconds  time out in seconds
+     * @return the return value from {@link WebDriverWait#until}.
      * @throws TimeoutException if this UI element is still visible after the specified timeout is reached  
      */
-    public void waitUntilInvisible(int timeOutInSeconds) {
+    public Boolean waitUntilNotVisible(int timeOutInSeconds) {
         if (this.webElement != null) {
             // TODO: Implement waiting for a WebElement to become invisible (rarely needed).
             throw new RuntimeException("This method is not yet implemented for a UI element that is tied to a particular WebElement.");
         }
         String timeOutMessage = "Expecting " + this.getName() +
             " to disappear but it is still visible after " + timeOutInSeconds + " seconds.";
-        getBrowser().waitUntil(
+        return getBrowser().waitUntil(
             ExpectedConditions.invisibilityOfElementLocated(this.locator),
             timeOutInSeconds, timeOutMessage);
     }
