@@ -70,7 +70,7 @@ namespace WebUI.Automation.Framework
 
         /// <summary>
         /// Returns the <seealso cref="Browser"/> instance used by this page.
-        /// It is default to the <seealso cref="Browser"/> instance returned by <seealso cref="WebUI#getDefaultBrowser"/>
+        /// It is default to the <seealso cref="Browser"/> instance returned by <seealso cref="WebUIGlobals.DefaultBrowser"/>
         /// when this page is created. </summary>
         /// <returns> the <seealso cref="Browser"/> instance used by this page </returns>
         public Browser Browser
@@ -79,7 +79,7 @@ namespace WebUI.Automation.Framework
             {
                 if (this.browser == null)
                 {
-                    this.browser = WebUI.DefaultBrowser;
+                    this.browser = WebUIGlobals.DefaultBrowser;
                 }
                 return this.browser;
             }
@@ -104,7 +104,7 @@ namespace WebUI.Automation.Framework
 
         /// <summary>
         /// Returns whether this web page is visible or not within the default page loading timeout,
-        /// which is specified and can be configured by <seealso cref="WebUI.DefaultPageLoadingTimeout"/>.
+        /// which is specified and can be configured by <seealso cref="WebUIGlobals.DefaultPageLoadingTimeout"/>.
         /// 
         /// A page is considered available if the browser can use the locator of this page to locate a visible <seealso cref="WebElement"/>.
         /// </summary>
@@ -114,7 +114,7 @@ namespace WebUI.Automation.Framework
         {
             get
             {
-                return BecomeVisible(WebUI.DefaultPageLoadingTimeout);
+                return BecomeVisible(WebUIGlobals.DefaultPageLoadingTimeout);
             }
         }
 
@@ -154,7 +154,7 @@ namespace WebUI.Automation.Framework
 
         /// <summary>
         /// Waits until this page becomes available (i.e., its key element is visible), or until the default page-loading timeout is reached.
-        /// The default page-loading timeout is determined and can be configured by <seealso cref="WebUI#defaultPageLoadingTimeout"/>.
+        /// The default page-loading timeout is determined and can be configured by <seealso cref="WebUIGlobals.DefaultPageLoadingTimeout"/>.
         /// 
         /// A page is considered available if the browser can use the locator of this page to locate a visible <seealso cref="WebElement"/>.
         /// </summary>
@@ -162,7 +162,7 @@ namespace WebUI.Automation.Framework
         /// <exception cref="TimeoutException"> if the page is still not available after the default page-loading timeout expires  </exception>
         public virtual T WaitUntilAvailable()
         {
-            return this.WaitUntilAvailable(WebUI.DefaultPageLoadingTimeout);
+            return this.WaitUntilAvailable(WebUIGlobals.DefaultPageLoadingTimeout);
         }
 
         /// <summary>

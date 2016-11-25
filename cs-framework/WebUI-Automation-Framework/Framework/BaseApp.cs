@@ -70,7 +70,7 @@ namespace WebUI.Automation.Framework
 
         /// <summary>
         /// Returns the <seealso cref="Browser"/> instance used by this web application.
-        /// It is default to the <seealso cref="Browser"/> instance returned by <seealso cref="WebUI#getDefaultBrowser"/>
+        /// It is default to the <seealso cref="Browser"/> instance returned by <seealso cref="WebUIGlobals.DefaultBrowser"/>
         /// when this page is created. </summary>
         /// <returns> the <seealso cref="Browser"/> instance used by this web application </returns>
         public Browser Browser
@@ -79,7 +79,7 @@ namespace WebUI.Automation.Framework
             {
                 if (this.browser == null)
                 {
-                    this.browser = WebUI.DefaultBrowser;
+                    this.browser = WebUIGlobals.DefaultBrowser;
                 }
                 return this.browser;
             }
