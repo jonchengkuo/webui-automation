@@ -1,7 +1,7 @@
 ﻿namespace WebUI.Automation.Framework
 {
 
-    public class WebUI
+    public class WebUIGlobals
     {
 
         private static Browser s_defaultBrowser;

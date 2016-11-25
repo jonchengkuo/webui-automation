@@ -79,7 +79,7 @@ namespace WebUI.Automation.Framework
                 throw new System.NullReferenceException("The locator given to the UI element is null.");
             }
             this.locator = locator;
-            this.browser = WebUI.DefaultBrowser;
+            this.browser = WebUIGlobals.DefaultBrowser;
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace WebUI.Automation.Framework
 
         /// <summary>
         /// Returns the <seealso cref="Browser"/> instance used by this UI element.
-        /// It is default to the <seealso cref="Browser"/> instance returned by <seealso cref="WebUI#getDefaultBrowser"/>
+        /// It is default to the <seealso cref="Browser"/> instance returned by <seealso cref="WebUIGlobals.DefaultBrowser"/>
         /// when this UI element is created with a <seealso cref="By"/> locator.
         /// If this UI element is created with a <seealso cref="IWebElement"/>, this method will throw an <seealso cref="IllegalStateException"/>. </summary>
         /// <returns> the <seealso cref="Browser"/> instance used by this UI element </returns>
@@ -194,7 +194,7 @@ namespace WebUI.Automation.Framework
         /// <summary>
         /// Locates and returns the <seealso cref="IWebElement"/> of this UI element.
         /// It will periodically (every half second) locate it until the default implicit wait timeout is reached.
-        /// The default implicit wait timeout is determined and can be configured by <seealso cref="WebUI#defaultImplicitWaitTimeout"/>.
+        /// The default implicit wait timeout is determined and can be configured by <seealso cref="WebUIGlobals.DefaultImplicitWaitTimeout"/>.
         /// </summary>
         /// <param name="timeOutInSeconds">  timeout in seconds </param>
         /// <returns> the <seealso cref="IWebElement"/> located using the locator of this UI element </returns>
@@ -203,7 +203,7 @@ namespace WebUI.Automation.Framework
         {
             get
             {
-                return GetWebElement(WebUI.DefaultImplicitWaitTimeout);
+                return GetWebElement(WebUIGlobals.DefaultImplicitWaitTimeout);
             }
         }
 
@@ -257,7 +257,7 @@ namespace WebUI.Automation.Framework
         /// <summary>
         /// Returns whether this UI element exists (i.e., present in the DOM tree) or not,
         /// within the default implicit wait timeout, specified and can be configured by
-        /// <seealso cref="WebUI.DefaultImplicitWaitTimeout"/>.
+        /// <seealso cref="WebUIGlobals.DefaultImplicitWaitTimeout"/>.
         /// </summary>
         /// <param name="timeOutInSeconds">  timeout in seconds </param>
         /// <returns> <code>true</code> if this UI element exists within the default implicit wait timeout;
@@ -266,7 +266,7 @@ namespace WebUI.Automation.Framework
         {
             get
             {
-                return BecomeExists(WebUI.DefaultImplicitWaitTimeout);
+                return BecomeExists(WebUIGlobals.DefaultImplicitWaitTimeout);
             }
         }
 
@@ -302,7 +302,7 @@ namespace WebUI.Automation.Framework
         /// <summary>
         /// Property indicating whether this UI element is visible or not,
         /// within the default implicit wait timeout, specified and can be configured by
-        /// <seealso cref="WebUI.DefaultImplicitWaitTimeout"/>.
+        /// <seealso cref="WebUIGlobals.DefaultImplicitWaitTimeout"/>.
         /// </summary>
         /// <param name="timeOutInSeconds">  timeout in seconds </param>
         /// <returns> <code>true</code> if this UI element exists within the default implicit wait timeout;
@@ -311,7 +311,7 @@ namespace WebUI.Automation.Framework
         {
             get
             {
-                return BecomeVisible(WebUI.DefaultImplicitWaitTimeout);
+                return BecomeVisible(WebUIGlobals.DefaultImplicitWaitTimeout);
             }
         }
 
