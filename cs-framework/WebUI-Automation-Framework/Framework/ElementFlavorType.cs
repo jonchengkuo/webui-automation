@@ -1,4 +1,4 @@
-﻿namespace WebUI.Automation.Factory
+﻿namespace WebUI.Automation.Framework
 {
 
     /// <summary>
@@ -6,7 +6,7 @@
     /// </summary>
     public enum ElementFlavorType
     {
-        BASIC_HTML
+        BasicHtml
     }
 
 }

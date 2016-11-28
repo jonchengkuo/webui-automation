@@ -27,11 +27,13 @@ namespace WebUI.Automation.Framework
     /// <para>Example:</para>
     /// The following code opens and closes a Chrome browser:
     /// <pre>
-    ///     try (Browser browser = new Browser()) {
-    ///         browser.open(BrowserType.CHROME);
-    ///         // Do something.
-    ///         // The browser will be automatically closed after this line.
-    ///     }
+    ///   using WebUI.Automation.Framework;
+    ///
+    ///   try (Browser browser = new Browser()) {
+    ///       browser.open(BrowserType.Chrome);
+    ///       // Do something.
+    ///       // The browser will be automatically closed after this line.
+    ///   }
     /// </pre>
     /// </summary>
     public class Browser : ISearchContext, IJavaScriptExecutor, IDisposable
@@ -46,16 +48,16 @@ namespace WebUI.Automation.Framework
         /// </summary>
         public Browser()
         {
-            this.m_browserType = BrowserType.NONE;
+            this.m_browserType = BrowserType.None;
             this.m_webDriver = null;
         }
 
         /// <summary>
         /// Returns the type of the currently opened browser.
-        /// If no web browser is currently opened, it returns <seealso cref="BrowserType.NONE"/> .
+        /// If no web browser is currently opened, it returns <seealso cref="BrowserType.None"/> .
         /// </summary>
         /// <returns> the browser type of the currently opened browser
-        ///         or <seealso cref="BrowserType.NONE"/> if no web browser is currently opened </returns>
+        ///         or <seealso cref="BrowserType.None"/> if no web browser is currently opened </returns>
         public BrowserType BrowserType
         {
             get
@@ -111,10 +113,10 @@ namespace WebUI.Automation.Framework
 
             switch (browserType)
             {
-                case BrowserType.CHROME:
+                case BrowserType.Chrome:
                     this.m_webDriver = new ChromeDriver();
                     break;
-                case BrowserType.FIREFOX:
+                case BrowserType.Firefox:
                     this.m_webDriver = new FirefoxDriver();
                     break;
                 case BrowserType.IE:
@@ -149,7 +151,7 @@ namespace WebUI.Automation.Framework
                     // No matter closing the browser succeeds or not,
                     // we'll discard the current browser/web driver instance.
                     this.m_webDriver = null;
-                    this.BrowserType = BrowserType.NONE;
+                    this.BrowserType = BrowserType.None;
                 }
             }
         }

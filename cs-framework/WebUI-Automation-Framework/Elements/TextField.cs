@@ -33,42 +33,21 @@ namespace WebUI.Automation.Elements
         }
 
         /// <summary>
-        /// Simulates the user interaction of clearing this text field and entering the given text into this text field.
+        /// Returns the actual text in this text field or simulates the user interaction of
+        /// clearing this text field and entering the given text into this text field.
         /// 
-        /// If the text field does not exist, this method will keep waiting until it appears or until
+        /// If the text field is not visible (default) or does not exist, this method will keep waiting until it appears or until
         /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
         /// </summary>
-        /// <returns> this text field itself (for supporting the fluid interface) </returns>
-        /// <exception cref="NoSuchElementException"> if this text field still does not exist after the default implicit timeout is reached </exception>
-        public virtual TextField SetText(string text)
-        {
-            if (this.LocatedByTBD)
-            {
-                ByTBD.Log(this.Name + ".setText(\"" + text + "\")");
-            }
-            else
-            {
-                // Get the web element with the default implicit timeout.
-                IWebElement webElement = WebElement;
-                webElement.Clear();
-                webElement.SendKeys(text);
-            }
-            return this;
-        }
-
-        /// <summary>
-        /// Returns the actual text in this text field.
-        /// 
-        /// If the text field does not exist, this method will keep waiting until it appears or until
-        /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
-        /// </summary>
-        /// <returns> a String value representing the actual text in this text field </returns>
-        /// <exception cref="NoSuchElementException"> if this text field still does not exist after the default implicit timeout is reached </exception>
+        /// <exception cref="NoSuchElementException"> if this text field is still not visible (default) or does not exist
+        ///     after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this text field becomes invalid
+        ///            (unlikely unless the HTML tag of this text field is refreshed while this property is retrieved or set).</exception>
         public virtual string Text
         {
             get
             {
-                if (this.LocatedByTBD)
+                if (this.IsLocatedByTBD)
                 {
                     return ByTBD.MockedStringValue;
                 }
@@ -79,19 +58,35 @@ namespace WebUI.Automation.Elements
                     return webElement.GetAttribute("value");
                 }
             }
+            set
+            {
+                if (this.IsLocatedByTBD)
+                {
+                    ByTBD.Log(this.Name + ".setText(\"" + value + "\")");
+                }
+                else
+                {
+                    // Get the web element with the default implicit timeout.
+                    IWebElement webElement = WebElement;
+                    webElement.Clear();
+                    webElement.SendKeys(value);
+                }
+            }
         }
 
         /// <summary>
         /// Simulates the user interaction of submitting the web form that contains this text field.
         /// 
-        /// If the text field does not exist, this method will keep waiting until it appears or until
+        /// If the text field is not visible (default) or does not exist, this method will keep waiting until it appears or until
         /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
         /// </summary>
-        /// <returns> this text field itself (for supporting the fluid interface) </returns>
-        /// <exception cref="NoSuchElementException"> if this text field still does not exist after the default implicit timeout is reached </exception>
-        public virtual TextField Submit()
+        /// <exception cref="NoSuchElementException"> if this text field is still not visible (default) or does not exist
+        ///     after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this text field becomes invalid
+        ///            (unlikely unless the web page of this text field is refreshed while this method is invoked).</exception>
+        public virtual void Submit()
         {
-            if (this.LocatedByTBD)
+            if (this.IsLocatedByTBD)
             {
                 ByTBD.Log(Name + ".submit()");
             }
@@ -101,7 +96,6 @@ namespace WebUI.Automation.Elements
                 // submit the form that contains this text field.
                 WebElement.Submit();
             }
-            return this;
         }
 
     }

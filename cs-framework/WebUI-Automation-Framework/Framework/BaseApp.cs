@@ -11,8 +11,11 @@ namespace WebUI.Automation.Framework
     /// 
     /// <para><b>Example:</b></para>
     /// <pre>
+    ///   using OpenQA.Selenium;
+    ///   using WebUI.Automation.Elements;
     ///   using WebUI.Automation.Framework;
-    /// 
+    ///   using static WebUI.Automation.Elements.ElementFactory;
+    ///
     ///   public class MyApp : BaseApp {
     ///       final LoginPage LoginPage = new LoginPage();
     ///       final MainPage MainPage = new MainPage();
@@ -20,7 +23,7 @@ namespace WebUI.Automation.Framework
     ///       public MyApp(BrowserType browserType) {
     ///           super(browserType, "http://mywebapp");
     ///       }
-    /// 
+    ///
     ///       public bool LogIn(string user, string password) {
     ///           if (this.LoginPage.IsAvailable()) {
     ///               this.LoginPage.LogIn(user, password);
@@ -36,7 +39,16 @@ namespace WebUI.Automation.Framework
     ///           }
     ///       }
     ///   }
-    /// 
+    ///
+    ///   public class LoginPage : BasePage<LoginPage> {
+    ///       TextField UserNameTextField = CreateTextField(By.id("username"));
+    ///       TextField PasswordTextField = CreateTextField(By.id("password"));
+    ///
+    ///       public void LogIn(string user, string password) {
+    ///           ...
+    ///       }
+    ///   }
+    ///
     ///   try (MyApp app = new MyApp(BrowserType.IE)) {
     ///       app.Launch();
     ///       if (app.LogIn("user", "password")) {

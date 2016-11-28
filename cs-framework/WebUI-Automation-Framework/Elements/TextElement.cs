@@ -8,7 +8,7 @@ namespace WebUI.Automation.Elements
     /// <summary>
     /// Class for representing and interacting with texts on a web page.
     /// </summary>
-    public class Text : BaseElement
+    public class TextElement : BaseElement
     {
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace WebUI.Automation.Elements
         /// <param name="locator">  The <seealso cref="By"/> locator for locating this text.
         ///                  it should select the HTML tag that contains the text. </param>
         /// <exception cref="NullPointerException"> if the specified <code>locator</code> is <code>null</code> </exception>
-        public Text(By locator) : base(locator)
+        public TextElement(By locator) : base(locator)
         {
         }
 
@@ -27,21 +27,34 @@ namespace WebUI.Automation.Elements
         /// <param name="webElement">  The <seealso cref="IWebElement"/> of this text;
         ///                     it should refer to the HTML tag that contains the text. </param>
         /// <exception cref="NullPointerException"> if the specified <code>webElement</code> is <code>null</code> </exception>
-        public Text(IWebElement webElement) : base(webElement)
+        public TextElement(IWebElement webElement) : base(webElement)
         {
         }
 
         /// <summary>
-        /// Returns the actual text in this text element.
+        /// Gets the actual text of this text element, without any leading or trailing whitespace,
+        /// and with other whitespace collapsed.
         /// 
-        /// If the text element does not exist, this method will keep waiting until it appears or until
+        /// If the text element is not visible (default) or does not exist, this method will keep waiting until it appears or until
         /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
         /// </summary>
-        /// <returns> a String value representing the actual text in this text element </returns>
-        /// <exception cref="NoSuchElementException"> if this text element still does not exist after the default implicit timeout is reached </exception>
-        public virtual string GetText()
+        /// <exception cref="NoSuchElementException"> if this text element is still not visible (default) or does not exist
+        ///     after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this text element becomes invalid
+        ///     (unlikely unless the HTML tag of this text element is refreshed while this property is retrieved).</exception>
+        public virtual string Text
         {
-            return WebElement.Text;
+            get
+            {
+                if (this.IsLocatedByTBD)
+                {
+                    return ByTBD.MockedStringValue;
+                }
+                else
+                {
+                    return WebElement.Text;
+                }
+            }
         }
 
     }

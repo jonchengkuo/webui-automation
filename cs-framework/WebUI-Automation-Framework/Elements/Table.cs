@@ -43,6 +43,10 @@ namespace WebUI.Automation.Elements
         /// Returns the <seealso cref="IWebElement"/> instances that point to the <tr> elements of each table row.
         /// @return
         /// </summary>
+        /// <exception cref="NoSuchElementException"> if this table is still not visible (default) or does not exist
+        ///            after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this table becomes invalid
+        ///            (unlikely unless the HTML tag of this table is refreshed while this property is retrieved).</exception>
         public virtual IList<IWebElement> RowElements
         {
             get
@@ -52,18 +56,30 @@ namespace WebUI.Automation.Elements
             }
         }
 
+        /// <exception cref="NoSuchElementException"> if this table is still not visible (default) or does not exist
+        ///            after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this table becomes invalid
+        ///            (unlikely unless the HTML tag of this table is refreshed while this method is invoked).</exception>
         public virtual IWebElement GetRowElement(int rowIndex)
         {
             IWebElement tableElement = WebElement;
             return TableHelper.FindRowElement(tableElement, rowIndex);
         }
 
+        /// <exception cref="NoSuchElementException"> if this table is still not visible (default) or does not exist
+        ///            after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this table becomes invalid
+        ///            (unlikely unless the HTML tag of this table is refreshed while this method is invoked).</exception>
         public virtual IList<IWebElement> GetCellElements(int rowIndex)
         {
             IWebElement rowElement = GetRowElement(rowIndex);
             return TableHelper.FindCellElements(rowElement);
         }
 
+        /// <exception cref="NoSuchElementException"> if this table is still not visible (default) or does not exist
+        ///            after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this table becomes invalid
+        ///            (unlikely unless the HTML tag of this table is refreshed while this method is invoked).</exception>
         public virtual IList<string> GetCellTexts(int rowIndex)
         {
             IList<IWebElement> cellElements = GetCellElements(rowIndex);
@@ -75,12 +91,20 @@ namespace WebUI.Automation.Elements
             return textList;
         }
 
+        /// <exception cref="NoSuchElementException"> if this table is still not visible (default) or does not exist
+        ///            after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this table becomes invalid
+        ///            (unlikely unless the HTML tag of this table is refreshed while this method is invoked).</exception>
         public virtual IWebElement GetCellElement(int rowIndex, int columnIndex)
         {
             IWebElement rowElement = GetRowElement(rowIndex);
             return TableHelper.FindCellElement(rowElement, columnIndex);
         }
 
+        /// <exception cref="NoSuchElementException"> if this table is still not visible (default) or does not exist
+        ///            after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this table becomes invalid
+        ///            (unlikely unless the HTML tag of this table is refreshed while this method is invoked).</exception>
         public virtual string GetCellText(int rowIndex, int columnIndex)
         {
             return GetCellElement(rowIndex, columnIndex).Text;
