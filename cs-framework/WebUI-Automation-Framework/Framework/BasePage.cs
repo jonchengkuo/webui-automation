@@ -12,9 +12,15 @@ namespace WebUI.Automation.Framework
     /// 
     /// <para><b>Example:</b></para>
     /// <pre>
+    ///   using OpenQA.Selenium;
+    ///   using WebUI.Automation.Elements;
     ///   using WebUI.Automation.Framework;
-    /// 
+    ///   using static WebUI.Automation.Elements.ElementFactory;
+    ///
     ///   public class LoginPage : BasePage<LoginPage> {
+    ///       TextField UserNameTextField = CreateTextField(By.id("username"));
+    ///       TextField PasswordTextField = CreateTextField(By.id("password"));
+    ///
     ///       public void LogIn(string user, string password) {
     ///           ...
     ///       }
@@ -40,26 +46,6 @@ namespace WebUI.Automation.Framework
             this.locator = locator;
         }
 
-        protected internal virtual BaseElement KeyElement
-        {
-            set
-            {
-                if (value == null)
-                {
-                    throw new System.NullReferenceException("The key element given to the page is null.");
-                }
-                this.locator = value.Locator;
-            }
-        }
-
-        private void AssertLocatorNotNull()
-        {
-            if (this.locator == null)
-            {
-                throw new System.NullReferenceException("The locator of this page object is not set." + " You must set it (preferred in your page class constructor) using either" + " the BasePage constructor or the BasePage.setKeyElement method.");
-            }
-        }
-
         public virtual string Name
         {
             get
@@ -73,7 +59,7 @@ namespace WebUI.Automation.Framework
         /// It is default to the <seealso cref="Browser"/> instance returned by <seealso cref="WebUIGlobals.DefaultBrowser"/>
         /// when this page is created. </summary>
         /// <returns> the <seealso cref="Browser"/> instance used by this page </returns>
-        public Browser Browser
+        public virtual Browser Browser
         {
             get
             {
@@ -85,22 +71,21 @@ namespace WebUI.Automation.Framework
             }
         }
 
-        // Comment out this method until we want the framework to support multiple Browser instances.
-        /*
-         * Sets the {@link Browser} instance used by this page.
-         * TODO: It should also set the Browser instance of all of the UI elements in this page object.
-         * @return this page itself (for supporting the fluid interface) 
-         *
-        @SuppressWarnings("unchecked")
-        public T setBrowser(Browser browser) {
-            if (browser == null) {
-                throw new NullPointerException("The given browser object is null.");
+        protected internal virtual By Locator
+        {
+            get
+            {
+                return this.locator;
             }
-            this.browser = browser;
-            // TODO: Set all UI elements on this page object to use the given browser.
-            return (T) this;
-        }*/
-
+            set
+            {
+                if (value == null)
+                {
+                    throw new System.NullReferenceException("The locator given to this page is null.");
+                }
+                this.locator = value;
+            }
+        }
 
         /// <summary>
         /// Returns whether this web page is visible or not within the default page loading timeout,
@@ -181,6 +166,14 @@ namespace WebUI.Automation.Framework
             return this as T;
         }
 
+    }
+
+    private void AssertLocatorNotNull()
+    {
+        if (this.locator == null)
+        {
+            throw new System.NullReferenceException("The locator of this page object is not set." + " You must set it (preferred in your page class constructor) using either" + " the BasePage constructor or the BasePage.setKeyElement method.");
+        }
     }
 
 }

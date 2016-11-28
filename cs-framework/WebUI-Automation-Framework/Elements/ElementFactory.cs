@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
-using WebUI.Automation.Elements;
+using WebUI.Automation.Framework;
 
-namespace WebUI.Automation.Factory
+namespace WebUI.Automation.Elements
 {
 
     /// <summary>
@@ -20,6 +20,16 @@ namespace WebUI.Automation.Factory
     /// its factory methods. When a factory method creates a UI element, it may use the flavor to
     /// parameter a created UI element or to use a different UI element class instead of the basic
     /// UI element class provided by this framework.</P> 
+    ///
+    /// <para><b>Example:</b></para>
+    /// <pre>
+    ///   using OpenQA.Selenium;
+    ///   using WebUI.Automation.Elements;
+    ///   using static WebUI.Automation.Elements.ElementFactory;
+    ///
+    ///   TextField UserNameTextField = CreateTextField(By.id("username"));
+    ///   TextField PasswordTextField = CreateTextField(By.id("password"));
+    /// </pre>
     /// </summary>
     public class ElementFactory
     {
@@ -27,7 +37,7 @@ namespace WebUI.Automation.Factory
         /// <summary>
         /// The flavor to be considered when a factory method creates a UI element.
         /// </summary>
-        protected internal static ElementFlavorType elementFlavor = ElementFlavorType.BASIC_HTML;
+        protected internal static ElementFlavorType elementFlavor = ElementFlavorType.BasicHtml;
 
         /// <summary>
         /// Sets the flavor to be considered when a factory method creates a UI element. </summary>
@@ -77,12 +87,12 @@ namespace WebUI.Automation.Factory
         }
 
         /// <summary>
-        /// Creates an object to represent a text on a web page. </summary>
+        /// Creates an object to represent a text element on a web page. </summary>
         /// <param name="locator">  The <seealso cref="By"/> locator for locating the text on a web page. </param>
-        /// <returns> the created <seealso cref="Text"/> element </returns>
-        public static Text CreateText(By locator)
+        /// <returns> the created <seealso cref="TextElement"/> </returns>
+        public static TextElement CreateTextElement(By locator)
         {
-            return new Text(locator);
+            return new TextElement(locator);
         }
 
         /// <summary>

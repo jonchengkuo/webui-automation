@@ -52,7 +52,9 @@
       <HintPath>..\packages\Selenium.Support.3.0.1\lib\net40\WebDriver.Support.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="WebUI.Automation.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="WebUI.Automation.Framework">
+      <HintPath>..\..\cs-framework\WebUI-Automation-Framework\bin\Debug\WebUI.Automation.Framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />

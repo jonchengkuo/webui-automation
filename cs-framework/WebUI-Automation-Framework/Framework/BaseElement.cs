@@ -35,9 +35,8 @@ namespace WebUI.Automation.Framework
     /// 
     /// <para><b>Example:</b></para>
     /// <pre>
-    ///   import org.openqa.selenium.By;
-    ///   import org.openqa.selenium.IWebElement;
-    ///   import webui.automation.framework.BaseElement;
+    ///   using OpenQA.Selenium;
+    ///   using WebUI.Automation.Elements;
     /// 
     ///   public class Button extends BaseElement {
     ///       public Button(By locator) {
@@ -46,7 +45,7 @@ namespace WebUI.Automation.Framework
     ///       public Button(IWebElement webElement) {
     ///           super(webElement);
     ///       }
-    ///       public void click() {
+    ///       public void Click() {
     ///           ...
     ///       }
     ///   }
@@ -142,7 +141,7 @@ namespace WebUI.Automation.Framework
         /// Returns <code>true</code> if the locator of this UI element is the special <seealso cref="ByTBD"/> locator. </summary>
         /// <returns> <code>true</code> if the locator of this UI element is the special <seealso cref="ByTBD"/> locator;
         ///         <code>false</code> otherwise </returns>
-        protected internal virtual bool LocatedByTBD
+        protected internal virtual bool IsLocatedByTBD
         {
             get
             {

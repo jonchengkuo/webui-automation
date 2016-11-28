@@ -30,38 +30,21 @@ namespace WebUI.Automation.Elements
         }
 
         /// <summary>
-        /// Simulates the user interaction of clicking this text link on UI.
+        /// Gets the actual text of this text link, without any leading or trailing whitespace,
+        /// and with other whitespace collapsed.
         /// 
-        /// If the text link does not exist, this method will keep waiting until it appears or until
+        /// If the text link is not visible (default) or does not exist, this method will keep waiting until it appears or until
         /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
         /// </summary>
-        /// <exception cref="NoSuchElementException"> if this text link still does not exist after the default implicit timeout is reached </exception>
-        public virtual void Click()
-        {
-            if (this.LocatedByTBD)
-            {
-                ByTBD.Log(this.Name + ".click()");
-            }
-            else
-            {
-                // Get the web element with the default implicit timeout and then click it.
-                WebElement.Click();
-            }
-        }
-
-        /// <summary>
-        /// Returns the actual text on this text link.
-        /// 
-        /// If the text link does not exist, this method will keep waiting until it appears or until
-        /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
-        /// </summary>
-        /// <returns> a String value representing the actual text on this text link </returns>
-        /// <exception cref="NoSuchElementException"> if this text link still does not exist after the default implicit timeout is reached </exception>
+        /// <exception cref="NoSuchElementException"> if this text link is still not visible (default) or does not exist
+        ///     after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this text link becomes invalid
+        ///     (unlikely unless the HTML tag of this text link is refreshed while this property is retrieved).</exception>
         public virtual string Text
         {
             get
             {
-                if (this.LocatedByTBD)
+                if (this.IsLocatedByTBD)
                 {
                     return ByTBD.MockedStringValue;
                 }
@@ -69,6 +52,29 @@ namespace WebUI.Automation.Elements
                 {
                     return WebElement.Text;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Simulates the user interaction of clicking this text link on UI.
+        /// 
+        /// If the text link is not visible (default) or does not exist, this method will keep waiting until it appears or until
+        /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
+        /// </summary>
+        /// <exception cref="NoSuchElementException"> if this text link is still not visible (default) or does not exist
+        ///     after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this text link becomes invalid
+        ///            (unlikely unless the HTML tag of this text link is refreshed while this method is invoked).</exception>
+        public virtual void Click()
+        {
+            if (this.IsLocatedByTBD)
+            {
+                ByTBD.Log(this.Name + ".click()");
+            }
+            else
+            {
+                // Get the web element with the default implicit timeout and then click it.
+                WebElement.Click();
             }
         }
 

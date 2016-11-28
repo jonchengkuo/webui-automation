@@ -36,13 +36,16 @@ namespace WebUI.Automation.Elements
         /// <summary>
         /// Simulates the user interaction of selecting this radio button.
         /// 
-        /// If the radio button does not exist, this method will keep waiting until it appears or until
+        /// If the radio button is not visible (default) or does not exist, this method will keep waiting until it appears or until
         /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
         /// </summary>
-        /// <exception cref="NoSuchElementException"> if this radio button still does not exist after the default implicit timeout is reached </exception>
+        /// <exception cref="NoSuchElementException"> if this radio button is still not visible (default) or does not exist
+        ///     after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this radio button becomes invalid
+        ///     (unlikely unless the HTML tag of this radio button is refreshed while this method is invoked).</exception>
         public virtual void Select()
         {
-            if (this.LocatedByTBD)
+            if (this.IsLocatedByTBD)
             {
                 ByTBD.Log(this.Name + ".select()");
             }

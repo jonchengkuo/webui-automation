@@ -3,7 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;  // ExpectedConditions
 using WebUI.Automation.Framework;
 
-namespace WebUI.Automation.Test.Framework
+namespace WebUI.Automation.Test
 {
 
     [TestClass]
@@ -24,7 +24,7 @@ namespace WebUI.Automation.Test.Framework
             Browser browser = new Browser();
             try
             {
-                Assert.AreEqual(BrowserType.NONE, browser.BrowserType, "The initial browser type should be NONE but it was not!");
+                Assert.AreEqual(BrowserType.None, browser.BrowserType, "The initial browser type should be NONE but it was not!");
                 //Assert.Throws(Exception, browser.WebDriver, "The initial WebDriver reference should be null but it was not!");
 
                 browser.Launch(this.browserType);
@@ -37,7 +37,7 @@ namespace WebUI.Automation.Test.Framework
                 // Explicitly close the web browser as long as the open has succeeded.
                 browser.Dispose();
             }
-            Assert.AreEqual(BrowserType.NONE, browser.BrowserType, "After closing the web browser, the current browser type should be null but it was not!");
+            Assert.AreEqual(BrowserType.None, browser.BrowserType, "After closing the web browser, the current browser type should be null but it was not!");
             //Assert.Throws(Exception, browser.WebDriver, "After closing the web browser, the WebDriver reference should be null but it was not!");
 
             // Closing more than once should be allowed.

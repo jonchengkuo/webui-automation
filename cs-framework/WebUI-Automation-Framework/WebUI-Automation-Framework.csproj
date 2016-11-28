@@ -57,21 +57,23 @@
     <Compile Include="Elements\RadioButton.cs" />
     <Compile Include="Elements\Table.cs" />
     <Compile Include="Elements\TableHelper.cs" />
-    <Compile Include="Elements\Text.cs" />
+    <Compile Include="Elements\TextElement.cs" />
     <Compile Include="Elements\TextField.cs" />
     <Compile Include="Elements\TextLink.cs" />
-    <Compile Include="Factory\ElementFactory.cs" />
-    <Compile Include="Factory\ElementFlavorType.cs" />
+    <Compile Include="Elements\ElementFactory.cs" />
+    <Compile Include="Framework\ElementFlavorType.cs" />
     <Compile Include="Framework\BaseApp.cs" />
     <Compile Include="Framework\BaseElement.cs" />
     <Compile Include="Framework\BasePage.cs" />
     <Compile Include="Framework\Browser.cs" />
     <Compile Include="Framework\BrowserType.cs" />
     <Compile Include="Framework\ByTBD.cs" />
-    <Compile Include="Framework\WebUI.cs" />
+    <Compile Include="Framework\WebUIGlobals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Factory\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

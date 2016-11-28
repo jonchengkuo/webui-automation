@@ -33,13 +33,16 @@ namespace WebUI.Automation.Elements
         /// <summary>
         /// Simulates the user interaction of clicking this button on UI.
         /// 
-        /// If the button does not exist, this method will keep waiting until it appears or until
+        /// If the button is not visible (default) or does not exist, this method will keep waiting until it appears or until
         /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
         /// </summary>
-        /// <exception cref="NoSuchElementException"> if this button still does not exist after the default implicit timeout is reached </exception>
+        /// <exception cref="NoSuchElementException"> if this button is still not visible (default) or does not exist
+        ///     after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this button becomes invalid
+        ///     (unlikely unless the HTML tag of this button is refreshed while this method is invoked).</exception>
         public virtual void Click()
         {
-            if (this.LocatedByTBD)
+            if (this.IsLocatedByTBD)
             {
                 ByTBD.Log(this.Name + ".click()");
             }
@@ -57,12 +60,13 @@ namespace WebUI.Automation.Elements
         /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
         /// </summary>
         /// <returns> a String value representing the actual text on this button </returns>
-        /// <exception cref="NoSuchElementException"> if this button still does not exist after the default implicit timeout is reached </exception>
+        /// <exception cref="NoSuchElementException"> if this button is still not visible (default) or does not exist
+        ///     after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
         public virtual string Text
         {
             get
             {
-                if (this.LocatedByTBD)
+                if (this.IsLocatedByTBD)
                 {
                     return ByTBD.MockedStringValue;
                 }

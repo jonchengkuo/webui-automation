@@ -36,13 +36,16 @@ namespace WebUI.Automation.Elements
         /// <summary>
         /// Simulates the user interaction of checking this check box.
         /// 
-        /// If the check box does not exist, this method will keep waiting until it appears or until
+        /// If the check box is not visible (default) or does not exist, this method will keep waiting until it appears or until
         /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
         /// </summary>
-        /// <exception cref="NoSuchElementException"> if this check box still does not exist after the default implicit timeout is reached </exception>
+        /// <exception cref="NoSuchElementException"> if this check box is still not visible (default) or does not exist
+        ///     after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this check box becomes invalid
+        ///     (unlikely unless the HTML tag of this check box is refreshed while this method is invoked).</exception>
         public virtual void Check()
         {
-            if (this.LocatedByTBD)
+            if (this.IsLocatedByTBD)
             {
                 ByTBD.Log(this.Name + ".check()");
             }
@@ -60,14 +63,16 @@ namespace WebUI.Automation.Elements
         /// <summary>
         /// Simulates the user interaction of unchecking this check box.
         /// 
-        /// If the check box does not exist, this method will keep waiting until it appears or until
+        /// If the check box is not visible (default) or does not exist, this method will keep waiting until it appears or until
         /// the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached.  
         /// </summary>
-        /// <returns> this check box itself (for supporting the fluid interface) </returns>
-        /// <exception cref="NoSuchElementException"> if this check box still does not exist after the default implicit timeout is reached </exception>
-        public virtual CheckBox Uncheck()
+        /// <exception cref="NoSuchElementException"> if this check box is still not visible (default) or does not exist
+        ///     after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
+        /// <exception cref="StaleElementReferenceException">Thrown when the <seealso cref="IWebElement"/> of this check box becomes invalid
+        ///     (unlikely unless the HTML tag of this check box is refreshed while this method is invoked).</exception>
+        public virtual void Uncheck()
         {
-            if (this.LocatedByTBD)
+            if (this.IsLocatedByTBD)
             {
                 ByTBD.Log(this.Name + ".uncheck()");
             }
@@ -80,7 +85,6 @@ namespace WebUI.Automation.Elements
                     webElement.Click();
                 }
             }
-            return this;
         }
 
     }

@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;  // ExpectedConditions
 using WebUI.Automation.Elements;
 using WebUI.Automation.Framework;
 
@@ -16,7 +15,7 @@ namespace TextFieldExample
             {
                 browser.Launch(BrowserType.IE).NavigateTo(url);
                 searchBox.WaitUntilVisible(10);
-                searchBox.SetText("selenium");
+                searchBox.Text = "selenium";
                 searchBox.Submit();
                 browser.Sleep(5);
             }
