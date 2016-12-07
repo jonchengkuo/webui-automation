@@ -6,16 +6,18 @@ namespace WebUI.Automation.Elements
 {
 
     /// <summary>
-    /// Class for representing and interacting with texts on a web page.
+    /// Class for representing and interacting with a piece of text on a web page.
+    /// A piece of text on a web page may be specified in any of, but not limited to, the following HTML tags:
+    /// &lt;p&gt;, &lt;div&gt;, &lt;span&gt;.
+    /// If the text is defined by an HTML &lt;label&gt; tag, you should use the <seealso cref="cref="Label" element instead./>
     /// </summary>
     public class TextElement : BaseElement
     {
 
         /// <summary>
         /// Constructs an object to represent and interact with a text on a web page.
-        /// A text is usually displayed by an HTML {@code <div>}, {@code <span>}, or {@code <label>} tag.
         /// </summary>
-        /// <param name="locator">  The <seealso cref="By"/> locator for locating this text.
+        /// <param name="locator">  The <seealso cref="By"/> locator for locating this text;
         ///                  it should select the HTML tag that contains the text. </param>
         /// <exception cref="NullPointerException"> if the specified <code>locator</code> is <code>null</code> </exception>
         public TextElement(By locator) : base(locator)

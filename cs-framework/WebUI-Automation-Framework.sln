@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI-Automation-Framework", "WebUI-Automation-Framework\WebUI-Automation-Framework.csproj", "{A381C9F4-FF59-48A9-9F2E-FFC2B382E02E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI-Automation-Test", "WebUI-Automation-Test\WebUI-Automation-Test.csproj", "{0A2E019A-DEE1-42E5-8053-B0FE9BF022C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI-Automation-Tests", "WebUI-Automation-Tests\WebUI-Automation-Tests.csproj", "{0A2E019A-DEE1-42E5-8053-B0FE9BF022C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

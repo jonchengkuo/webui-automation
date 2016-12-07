@@ -7,36 +7,40 @@ using OpenQA.Selenium.Chrome;          // ChromeDriver
 using OpenQA.Selenium.Firefox;         // FirefoxDriver
 using OpenQA.Selenium.IE;              // InternetExplorerDriver
 using OpenQA.Selenium.Support.UI;      // WebDriverWait
+using OpenQA.Selenium.Support.Extensions; // WebDriverExtensions
 
 namespace WebUI.Automation.Framework
 {
 
     /// <summary>
     /// This class provides a reference and an interface to interact with a web browser instance.
-    /// Unlike a Selenium <seealso cref="WebDriver"/>, the reference to an instance of this class does not need to change
-    /// when the web browser in use changes (e.g., changing the web browser in use from Chrome to Firefox).
+    /// Unlike a Selenium <seealso cref="WebDriver"/>, an instance of this class is created without
+    /// an opened web browser instance. Thus, its reference can be kept by anyone (e.g., a web page object)
+    /// (and does not need to change) before opening and after closing a web browser instance.
+    /// This is convenient because you can construct your web page objects independent from the launch
+    /// and/or change of web browsers (e.g., changing the web browser in use from Chrome to Firefox).
     /// 
     /// <para>An instance of this class may be in one of the following states:</para>
     /// <ol>
     ///   <li>Non-opened: The default state; no web browser instance is associated with this <seealso cref="Browser"/> instance.
-    ///   <li>Opened: A web browser instance is associated with this <seealso cref="Browser"/> instance.
+    ///   <li>Opened: An opened web browser instance is associated with this <seealso cref="Browser"/> instance.
     /// </ol>
     /// 
-    /// <para>An instance of this class may enter the opened state by calling the <seealso cref="#open(BrowserType)"/> method.</para>
+    /// <para>An instance of this class may enter the opened state by calling the <seealso cref="Browser.Launch"/> method.</para>
     /// 
     /// <para>Example:</para>
     /// The following code opens and closes a Chrome browser:
     /// <pre>
     ///   using WebUI.Automation.Framework;
     ///
-    ///   try (Browser browser = new Browser()) {
-    ///       browser.open(BrowserType.Chrome);
+    ///   using (Browser browser = new Browser()) {
+    ///       browser.Launch(BrowserType.Chrome);
     ///       // Do something.
     ///       // The browser will be automatically closed after this line.
     ///   }
     /// </pre>
     /// </summary>
-    public class Browser : ISearchContext, IJavaScriptExecutor, IDisposable
+    public class Browser : ISearchContext, IDisposable
     {
         #region Browser constructor and properties (1)
 
@@ -44,12 +48,25 @@ namespace WebUI.Automation.Framework
         protected internal IWebDriver m_webDriver;
 
         /// <summary>
-        /// Constructs a non-opened browser instance. 
+        /// Constructs a <seealso cref="Browser"/> instance that is not associated with an opened web browser instance.
         /// </summary>
         public Browser()
         {
             this.m_browserType = BrowserType.None;
             this.m_webDriver = null;
+        }
+
+        /// <summary>
+        /// Returns whether this Browser object is currently associated with an opened web browser or not.
+        /// </summary>
+        /// <returns> true if this Browser object is currently associated with an opened web browser;
+        ///         false otherwise </returns>
+        public bool Opened
+        {
+            get
+            {
+                return (this.m_webDriver != null);
+            }
         }
 
         /// <summary>
@@ -285,7 +302,7 @@ namespace WebUI.Automation.Framework
 
         #endregion
 
-        #region Methods implementing ISearchContext
+        #region ISearchContext methods
 
         public IWebElement FindElement(By by)
         {
@@ -299,16 +316,45 @@ namespace WebUI.Automation.Framework
 
         #endregion
 
-        #region Methods implementing
+        #region WebDriverExtensions methods
 
-        public object ExecuteScript(string script, params object[] args)
+        /// <summary>
+        /// Executes JavaScript in the context of the currently selected frame or window
+        /// </summary>
+        /// <param name="script">The JavaScript code to execute.</param>
+        /// <param name="args">The arguments to the script.</param>
+        /// <exception cref="WebDriverException">Thrown if this <see cref="IWebDriver"/> instance
+        /// does not implement <see cref="IJavaScriptExecutor"/></exception>
+        public void ExecuteJavaScript(string script, params object[] args)
         {
-            return (this.WebDriver as IJavaScriptExecutor).ExecuteScript(script, args);
+            this.WebDriver.ExecuteJavaScript(script, args);
         }
 
-        public object ExecuteAsyncScript(string script, params object[] args)
+        /// <summary>
+        /// Executes JavaScript in the context of the currently selected frame or window
+        /// </summary>
+        /// <typeparam name="T">Expected return type of the JavaScript execution.</typeparam>
+        /// <param name="script">The JavaScript code to execute.</param>
+        /// <param name="args">The arguments to the script.</param>
+        /// <returns>The value returned by the script.</returns>
+        /// <exception cref="WebDriverException">Thrown if this <see cref="IWebDriver"/> instance
+        /// does not implement <see cref="IJavaScriptExecutor"/>, or if the actual return type
+        /// of the JavaScript execution does not match the expected type.</exception>
+        public T ExecuteJavaScript<T>(string script, params object[] args)
         {
-            return (this.WebDriver as IJavaScriptExecutor).ExecuteAsyncScript(script, args);
+            return this.WebDriver.ExecuteJavaScript<T>(script, args);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="Screenshot"/> object representing the image of the page on the screen.
+        /// </summary>
+        /// <returns>A <see cref="Screenshot"/> object containing the image.</returns>
+        /// <exception cref="WebDriverException">Thrown if this <see cref="IWebDriver"/> instance
+        /// does not implement <see cref="ITakesScreenshot"/>, or the capabilities of the driver
+        /// indicate that it cannot take screenshots.</exception>
+        public Screenshot TakeScreenshot()
+        {
+            return this.WebDriver.TakeScreenshot();
         }
 
         #endregion
