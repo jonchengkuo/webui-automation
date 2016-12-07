@@ -166,14 +166,14 @@ namespace WebUI.Automation.Framework
             return this as T;
         }
 
-    }
-
-    private void AssertLocatorNotNull()
-    {
-        if (this.locator == null)
+        private void AssertLocatorNotNull()
         {
-            throw new System.NullReferenceException("The locator of this page object is not set." + " You must set it (preferred in your page class constructor) using either" + " the BasePage constructor or the BasePage.setKeyElement method.");
+            if (this.locator == null)
+            {
+                throw new System.NullReferenceException("The locator of this page object is not set." + " You must set it (preferred in your page class constructor) using either" + " the BasePage constructor or the BasePage.setKeyElement method.");
+            }
         }
+
     }
 
 }

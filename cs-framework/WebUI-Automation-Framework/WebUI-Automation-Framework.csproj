@@ -57,6 +57,7 @@
     <Compile Include="Elements\RadioButton.cs" />
     <Compile Include="Elements\Table.cs" />
     <Compile Include="Elements\TableHelper.cs" />
+    <Compile Include="Elements\Label.cs" />
     <Compile Include="Elements\TextElement.cs" />
     <Compile Include="Elements\TextField.cs" />
     <Compile Include="Elements\TextLink.cs" />
