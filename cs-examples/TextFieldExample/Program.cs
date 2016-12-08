@@ -2,7 +2,7 @@
 using WebUI.Automation.Elements;
 using WebUI.Automation.Framework;
 
-namespace TextFieldExample
+namespace WebUI.Automation.Examples.TextFieldExample
 {
     class Program
     {

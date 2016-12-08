@@ -17,17 +17,17 @@ namespace WebUI.Automation.Framework
     ///   using static WebUI.Automation.Elements.ElementFactory;
     ///
     ///   public class MyApp : BaseApp {
-    ///       final LoginPage LoginPage = new LoginPage();
-    ///       final MainPage MainPage = new MainPage();
+    ///       LoginPage LoginPage = new LoginPage();
+    ///       MainPage MainPage = new MainPage();
     /// 
-    ///       public MyApp(BrowserType browserType) {
-    ///           super(browserType, "http://mywebapp");
+    ///       public MyApp() {
+    ///           super("http://mywebapp");
     ///       }
     ///
-    ///       public bool LogIn(string user, string password) {
-    ///           if (this.LoginPage.IsAvailable()) {
-    ///               this.LoginPage.LogIn(user, password);
-    ///               if (this.MainPage.IsAvailable()) {
+    ///       public bool LogIn(string username, string password) {
+    ///           if (LoginPage.BecomeAvailable()) {
+    ///               LoginPage.LogIn(username, password);
+    ///               if (MainPage.BecomeAvailable()) {
     ///                   return true;
     ///               } else {
     ///                   // Error: Login failed.
@@ -38,40 +38,41 @@ namespace WebUI.Automation.Framework
     ///               return false;
     ///           }
     ///       }
-    ///   }
     ///
-    ///   public class LoginPage : BasePage<LoginPage> {
-    ///       TextField UserNameTextField = CreateTextField(By.id("username"));
-    ///       TextField PasswordTextField = CreateTextField(By.id("password"));
-    ///
-    ///       public void LogIn(string user, string password) {
+    ///       public void DoSomething() {
     ///           ...
     ///       }
     ///   }
     ///
-    ///   try (MyApp app = new MyApp(BrowserType.IE)) {
-    ///       app.Launch();
-    ///       if (app.LogIn("user", "password")) {
-    ///           app.MainPage.doSomething();
+    ///   // See the <seealso cref="BasePage"/> documentation for the LoginPage class example.
+    ///
+    ///   using (MyApp app = new MyApp()) {
+    ///       // Launch a web browser and navigate to the home page of MyApp.
+    ///       app.Launch(BrowserType.IE);
+    ///       if (app.LogIn("username", "password")) {
+    ///           app.DoSomething();
     ///           ....
     ///       }
-    ///       // The browser will be automatically closed after this line.
+    ///       // The web browser will be automatically closed after this line.
     ///   }
     /// </pre> 
     /// </summary>
     public class BaseApp : IDisposable
     {
 
-        private Browser browser;
-        private BrowserType browserType;
-        private string url;
+        // Private fields that can only be set by constructors.
+        readonly string homeUrl;
 
-        protected internal BaseApp(BrowserType browserType, string url)
+        protected BaseApp(string url)
         {
-            this.browserType = browserType;
-            this.url = url;
+            this.homeUrl = url;
         }
 
+        /// <summary>
+        /// Returns the name of this web application.
+        /// It is default to the simple class name of a derived class.
+        /// </summary>
+        /// <returns> the name of this web application </returns>
         public virtual string Name
         {
             get
@@ -81,44 +82,36 @@ namespace WebUI.Automation.Framework
         }
 
         /// <summary>
-        /// Returns the <seealso cref="Browser"/> instance used by this web application.
-        /// It is default to the <seealso cref="Browser"/> instance returned by <seealso cref="WebUIGlobals.DefaultBrowser"/>
-        /// when this page is created. </summary>
+        /// Returns the <seealso cref="Browser"/> instance used by this web app.
+        /// It is default to <seealso cref="WebUIGlobals.DefaultBrowser"/> when this web app instance is constructed.
+        /// </summary>
         /// <returns> the <seealso cref="Browser"/> instance used by this web application </returns>
-        public Browser Browser
-        {
-            get
-            {
-                if (this.browser == null)
-                {
-                    this.browser = WebUIGlobals.DefaultBrowser;
-                }
-                return this.browser;
-            }
-        }
-
-        public virtual string Url
-        {
-            get
-            {
-                return this.url;
-            }
-        }
+        public virtual Browser Browser { get; set; } = WebUIGlobals.DefaultBrowser;
 
         /// <summary>
-        /// Opens a new browser instance/window and navigates to the web application home page.
+        /// Returns the home URL of this web application.
         /// </summary>
+        /// <returns> the home URL of this web application </returns>
+        public virtual string HomeUrl { get { return this.homeUrl; } }
+
+        /// <summary>
+        /// Opens a new web browser instance/window and navigates to the home page of this web application.
+        /// If the web browser is already opened, it will reuse the currently opened web browser instance.
+        /// </summary>
+        /// <exception cref="ArgumentException"> if the given browser type is invalid or is not supported </exception>
         /// <exception cref="WebDriverException"> if it cannot opens a new browser instance or cannot communicate with the browser instance </exception>
-        /// <exception cref="Exception"> if this web application is already opened </exception>
-        public virtual void Launch()
+        public virtual void Launch(BrowserType browserType)
         {
-            browser.Launch(this.browserType);
-            browser.NavigateTo(this.url);
+            if (!Browser.Opened)
+            {
+                Browser.Launch(browserType);
+            }
+            Browser.NavigateTo(HomeUrl);
         }
 
         public virtual void Dispose()
         {
-            browser.Dispose();
+            Browser.Dispose();
         }
 
     }

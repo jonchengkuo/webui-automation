@@ -35,20 +35,9 @@ namespace WebUI.Automation.Elements
     {
 
         /// <summary>
-        /// The flavor to be considered when a factory method creates a UI element.
-        /// </summary>
-        protected internal static ElementFlavorType elementFlavor = ElementFlavorType.BasicHtml;
-
-        /// <summary>
-        /// Sets the flavor to be considered when a factory method creates a UI element. </summary>
+        /// Gets or sets the flavor to be considered when a factory method creates a UI element. </summary>
         /// <param name="newFlavor">  a new UI element flavor to be used </param>
-        public static ElementFlavorType ElementFlavor
-        {
-            set
-            {
-                elementFlavor = value;
-            }
-        }
+        public static ElementFlavorType ElementFlavor { get; set; }
 
         /// <summary>
         /// Creates an object to represent a button on a web page. </summary>
