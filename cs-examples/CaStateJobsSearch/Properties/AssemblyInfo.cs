@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WebUI.Automation.Examples.TextFieldExample")]
+[assembly: AssemblyTitle("WebUI.Automation.Examples.CaStateJobsSearch")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("WebUI.Automation.Examples.TextFieldExample")]
-[assembly: AssemblyCopyright("Copyright © 2016")]
+[assembly: AssemblyProduct("WebUI.Automation.Examples.CaStateJobsSearch")]
+[assembly: AssemblyCopyright("Copyright ©2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ea0ed0bd-22f9-4d3d-907c-b656f12be5ff")]
+[assembly: Guid("7a02249d-df3c-4665-8ed5-13ce7cf018df")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -44,8 +44,8 @@ namespace WebUI.Automation.Framework
     {
         #region Browser constructor and properties (1)
 
-        protected internal BrowserType m_browserType;
-        protected internal IWebDriver m_webDriver;
+        protected BrowserType m_browserType;
+        protected IWebDriver m_webDriver;
 
         /// <summary>
         /// Constructs a <seealso cref="Browser"/> instance that is not associated with an opened web browser instance.
@@ -81,7 +81,7 @@ namespace WebUI.Automation.Framework
             {
                 return this.m_browserType;
             }
-            protected internal set
+            protected set
             {
                 this.m_browserType = value;
             }
@@ -89,21 +89,21 @@ namespace WebUI.Automation.Framework
 
         /// <summary>
         /// Returns the <seealso cref="WebDriver"/> instance of the currently opened browser.
-        /// It throws an Exception if no web browser is currently opened.
+        /// It throws an InvalidOperationException if no web browser is currently opened.
         /// </summary>
         /// <returns> the <seealso cref="WebDriver"/> instance of the currently opened browser
-        /// <exception cref="Exception"> if no web browser is currently opened </exception>
+        /// <exception cref="InvalidOperationException"> if no web browser is currently opened </exception>
         public IWebDriver WebDriver
         {
             get
             {
                 if (this.m_webDriver == null)
                 {
-                    throw new Exception("This operation is illegal when no web browser is opened.");
+                    throw new InvalidOperationException("This operation is illegal when no web browser is opened.");
                 }
                 return this.m_webDriver;
             }
-            protected internal set
+            protected set
             {
                 this.m_webDriver = value;
             }
@@ -119,13 +119,14 @@ namespace WebUI.Automation.Framework
         /// </summary>
         /// <param name="browserType">  browser type </param>
         /// <returns> this browser instance </returns>
+        /// <exception cref="ArgumentException"> if the given browser type is invalid or is not supported </exception>
+        /// <exception cref="InvalidOperationException"> if this <seealso cref="Browser"/> instance is already opened </exception>
         /// <exception cref="WebDriverException"> if it cannot opens a new browser instance </exception>
-        /// <exception cref="Exception"> if this <seealso cref="Browser"/> instance is already opened </exception>
         public virtual Browser Launch(BrowserType browserType, string url = null)
         {
             if (this.m_webDriver != null)
             {
-                throw new Exception("This browser is already opened. You must dispose it before openning another browser instance.");
+                throw new InvalidOperationException("This browser is already opened. You must dispose it before openning another browser instance.");
             }
 
             switch (browserType)
@@ -140,7 +141,7 @@ namespace WebUI.Automation.Framework
                     this.m_webDriver = new InternetExplorerDriver();
                     break;
                 default:
-                    throw new Exception("Unsupported browser type: " + browserType);
+                    throw new ArgumentException("Unsupported browser type: " + browserType);
             }
             this.BrowserType = browserType;
             if (url != null)
@@ -177,6 +178,7 @@ namespace WebUI.Automation.Framework
 
         #region Browser properties (2)
 
+        /// <exception cref="InvalidOperationException"> if no web browser is currently opened </exception>
         public IWindow Window
         {
             get
@@ -188,6 +190,7 @@ namespace WebUI.Automation.Framework
         /// <summary>
         /// Returns the title of the web browser.
         /// </summary>
+        /// <exception cref="InvalidOperationException"> if no web browser is currently opened </exception>
         public virtual string Title
         {
             get
@@ -224,7 +227,7 @@ namespace WebUI.Automation.Framework
         /// </summary>
         /// <param name="url">  URL to navigate to </param>
         /// <returns> this browser instance </returns>
-        /// <exception cref="Exception"> if no web browser is currently opened </exception>
+        /// <exception cref="InvalidOperationException"> if no web browser is currently opened </exception>
         public Browser NavigateTo(String url)
         {
             this.WebDriver.Navigate().GoToUrl(url);
@@ -235,7 +238,7 @@ namespace WebUI.Automation.Framework
         /// Causes the opened web browser to navigate to the previous screen in the browser history.
         /// </summary>
         /// <returns> this browser instance </returns>
-        /// <exception cref="Exception"> if no web browser is currently opened </exception>
+        /// <exception cref="InvalidOperationException"> if no web browser is currently opened </exception>
         public Browser NavigateBack()
         {
             this.WebDriver.Navigate().Back();
@@ -246,7 +249,7 @@ namespace WebUI.Automation.Framework
         /// Causes the opened web browser to reload its current page.
         /// </summary>
         /// <returns> this browser instance </returns>
-        /// <exception cref="Exception"> if no web browser is currently opened </exception>
+        /// <exception cref="InvalidOperationException"> if no web browser is currently opened </exception>
         public Browser Refresh()
         {
             this.WebDriver.Navigate().Refresh();
@@ -264,16 +267,18 @@ namespace WebUI.Automation.Framework
         /// Example:
         /// <pre>
         ///     // Wait until the "username" text field is visible or timeout. 
-        ///     IWebElement e = browser.waitUntil(
-        ///         ExpectedConditions.visibleOfElementLocated(By.name("username")),
+        ///     IWebElement e = browser.WaitUntil(
+        ///         ExpectedConditions.ElementIsVisible(By.name("username")),
         ///         timeOutInSeconds);
         /// </pre>
         /// </para>
         /// </summary>
+        /// <param name="expectedCondition"> the expected condition to wait for </param>
         /// <param name="timeOutInSeconds">  the timeout in seconds when an expectation is called </param>
-        /// <param name="timeOutMessage">    the message to be included in the TimeoutException if it is thrown </param>
+        /// <param name="timeOutMessage">    the message to be included in the WebDriverTimeoutException if it is thrown </param>
         /// <returns> the non-null value returned by the specified expected condition function </returns>
-        /// <exception cref="TimeoutException"> if the specified expected condition function still returns <code>null</code>
+        /// <exception cref="InvalidOperationException"> if no web browser is currently opened </exception>
+        /// <exception cref="WebDriverTimeoutException"> if the specified expected condition function still returns <code>null</code>
         ///         when the specified timeout is reached </exception>
         /// <seealso cref= WebDriverWait </seealso>
         public T WaitUntil<T>(Func<IWebDriver, T> expectedCondition, int timeOutInSeconds, string timeOutMessage = null)
@@ -323,6 +328,7 @@ namespace WebUI.Automation.Framework
         /// </summary>
         /// <param name="script">The JavaScript code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
+        /// <exception cref="InvalidOperationException"> if no web browser is currently opened </exception>
         /// <exception cref="WebDriverException">Thrown if this <see cref="IWebDriver"/> instance
         /// does not implement <see cref="IJavaScriptExecutor"/></exception>
         public void ExecuteJavaScript(string script, params object[] args)
@@ -337,6 +343,7 @@ namespace WebUI.Automation.Framework
         /// <param name="script">The JavaScript code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
+        /// <exception cref="InvalidOperationException"> if no web browser is currently opened </exception>
         /// <exception cref="WebDriverException">Thrown if this <see cref="IWebDriver"/> instance
         /// does not implement <see cref="IJavaScriptExecutor"/>, or if the actual return type
         /// of the JavaScript execution does not match the expected type.</exception>
@@ -349,6 +356,7 @@ namespace WebUI.Automation.Framework
         /// Gets a <see cref="Screenshot"/> object representing the image of the page on the screen.
         /// </summary>
         /// <returns>A <see cref="Screenshot"/> object containing the image.</returns>
+        /// <exception cref="InvalidOperationException"> if no web browser is currently opened </exception>
         /// <exception cref="WebDriverException">Thrown if this <see cref="IWebDriver"/> instance
         /// does not implement <see cref="ITakesScreenshot"/>, or the capabilities of the driver
         /// indicate that it cannot take screenshots.</exception>

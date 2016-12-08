@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserExample", "BrowserEx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextFieldExample", "TextFieldExample\TextFieldExample.csproj", "{EA0ED0BD-22F9-4D3D-907C-B656F12BE5FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaStateJobsSearch", "CaStateJobsSearch\CaStateJobsSearch.csproj", "{7A02249D-DF3C-4665-8ED5-13CE7CF018DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EA0ED0BD-22F9-4D3D-907C-B656F12BE5FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA0ED0BD-22F9-4D3D-907C-B656F12BE5FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA0ED0BD-22F9-4D3D-907C-B656F12BE5FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A02249D-DF3C-4665-8ED5-13CE7CF018DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A02249D-DF3C-4665-8ED5-13CE7CF018DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A02249D-DF3C-4665-8ED5-13CE7CF018DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A02249D-DF3C-4665-8ED5-13CE7CF018DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

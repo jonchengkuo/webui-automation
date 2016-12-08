@@ -86,27 +86,6 @@ namespace WebUI.Automation.Elements
             }
         }
 
-        /// <summary>
-        /// Waits until this button becomes clickable, or until the specified timeout is reached.
-        /// It returns the located clickable web element.
-        /// </summary>
-        /// <param name="timeOutInSeconds">  time out in seconds </param>
-        /// <returns> the located clickable web element </returns>
-        /// <exception cref="TimeoutException"> if this button is still not clickable after the specified timeout is reached   </exception>
-        public virtual IWebElement WaitUntilClickable(int timeOutInSeconds)
-        {
-            if (Locator == null)
-            {
-                // TODO: Implement waiting for a WebElement to become clickable (rarely needed).
-                throw new Exception("This method is not yet implemented for a UI element that is tied to a particular WebElement.");
-            }
-            else
-            {
-                string timeOutMessage = "Timed out after " + timeOutInSeconds + " seconds in waiting for " + this.Name + " to become clickable.";
-                return Browser.WaitUntil(ExpectedConditions.ElementToBeClickable(Locator), timeOutInSeconds, timeOutMessage);
-            }
-        }
-
     }
 
 }

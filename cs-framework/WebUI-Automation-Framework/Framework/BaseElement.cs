@@ -60,25 +60,31 @@ namespace WebUI.Automation.Framework
     public class BaseElement
     {
 
-        private Browser browser;
-        private By locator;
+        // Private fields that can only be set by constructors.
+        readonly By locator;
+        readonly IWebElement webElement;
+
         private bool expectVisible = true;
 
-        private IWebElement webElement;
+        /// <summary>
+        /// Returns the <seealso cref="Browser"/> instance used by this UI element.
+        /// It is default to <seealso cref="WebUIGlobals.DefaultBrowser"/> when this UI element is constructed.
+        /// </summary>
+        /// <returns> the <seealso cref="Browser"/> instance used by this UI element </returns>
+        public virtual Browser Browser { get; set; } = WebUIGlobals.DefaultBrowser;
 
         /// <summary>
         /// Constructs the base object of a concrete UI element object that represents a specific UI element on a web page.
         /// The given <code>locator</code> will be used to locate the <seealso cref="IWebElement"/> of the UI element. </summary>
         /// <param name="locator">  The <seealso cref="By"/> locator for locating the UI element on a web page. </param>
         /// <exception cref="NullPointerException"> if the specified <code>locator</code> is <code>null</code> </exception>
-        protected internal BaseElement(By locator)
+        protected BaseElement(By locator)
         {
             if (locator == null)
             {
-                throw new System.NullReferenceException("The locator given to the UI element is null.");
+                throw new System.ArgumentNullException("The locator given to the UI element is null.");
             }
             this.locator = locator;
-            this.browser = WebUIGlobals.DefaultBrowser;
         }
 
         /// <summary>
@@ -86,16 +92,29 @@ namespace WebUI.Automation.Framework
         /// This UI element is directly tied to the given <seealso cref="IWebElement"/> located by other means. </summary>
         /// <param name="webElement">  The <seealso cref="IWebElement"/> of the UI element on a web page. </param>
         /// <exception cref="NullPointerException"> if the specified <code>webElement</code> is <code>null</code> </exception>
-        protected internal BaseElement(IWebElement webElement)
+        protected BaseElement(IWebElement webElement)
         {
             if (webElement == null)
             {
-                throw new System.NullReferenceException("The IWebElement given to the UI element is null.");
+                throw new System.ArgumentNullException("The IWebElement given to the UI element is null.");
             }
             this.webElement = webElement;
         }
 
-        protected internal virtual bool ExpectVisible
+        /// <summary>
+        /// Returns the <seealso cref="By"/> locator of this UI element.
+        /// If this UI element is created with a <seealso cref="IWebElement"/> instead of a locator, this property will return <code>null</code>. </summary>
+        /// <returns> the <seealso cref="By"/> locator of this UI element;
+        ///         <code>null</code> if this UI element is created with a <seealso cref="IWebElement"/> instead of a locator </returns>
+        public virtual By Locator
+        {
+            get
+            {
+                return this.locator;
+            }
+        }
+
+        protected virtual bool ExpectVisible
         {
             set
             {
@@ -125,23 +144,10 @@ namespace WebUI.Automation.Framework
         }
 
         /// <summary>
-        /// Returns the <seealso cref="By"/> locator of this UI element.
-        /// If this UI element is created with a <seealso cref="IWebElement"/> instead of a locator, this method will return <code>null</code>. </summary>
-        /// <returns> the <seealso cref="By"/> locator of this UI element;
-        ///         <code>null</code> if this UI element is created with a <seealso cref="IWebElement"/> instead of a locator </returns>
-        public virtual By Locator
-        {
-            get
-            {
-                return this.locator;
-            }
-        }
-
-        /// <summary>
         /// Returns <code>true</code> if the locator of this UI element is the special <seealso cref="ByTBD"/> locator. </summary>
         /// <returns> <code>true</code> if the locator of this UI element is the special <seealso cref="ByTBD"/> locator;
         ///         <code>false</code> otherwise </returns>
-        protected internal virtual bool IsLocatedByTBD
+        protected virtual bool IsLocatedByTBD
         {
             get
             {
@@ -155,40 +161,6 @@ namespace WebUI.Automation.Framework
                 }
             }
         }
-
-        /// <summary>
-        /// Returns the <seealso cref="Browser"/> instance used by this UI element.
-        /// It is default to the <seealso cref="Browser"/> instance returned by <seealso cref="WebUIGlobals.DefaultBrowser"/>
-        /// when this UI element is created with a <seealso cref="By"/> locator.
-        /// If this UI element is created with a <seealso cref="IWebElement"/>, this method will throw an <seealso cref="IllegalStateException"/>. </summary>
-        /// <returns> the <seealso cref="Browser"/> instance used by this UI element </returns>
-        /// <exception cref="IllegalStateException"> if this UI element is created with a <seealso cref="IWebElement"/> </exception>
-        public virtual Browser Browser
-        {
-            get
-            {
-                if (this.browser == null)
-                {
-                    throw new System.InvalidOperationException("No browser is available for this " + Name + " because it was created with a IWebElement.");
-                }
-                else
-                {
-                    return this.browser;
-                }
-            }
-        }
-
-        // Comment out this method until we want the framework to support multiple Browser instances.
-        /*
-         * Sets the {@link Browser} instance used by this UI element.
-         *
-        private void setBrowser(Browser browser) {
-            if (browser == null) {
-                throw new NullPointerException("The given browser object is null.");
-            }
-            this.browser = browser;
-        }*/
-
 
         /// <summary>
         /// Locates and returns the <seealso cref="IWebElement"/> of this UI element.
@@ -244,9 +216,9 @@ namespace WebUI.Automation.Framework
                         webElement = WaitUntilExists(timeOutInSeconds);
                     }
                 }
-                catch (TimeoutException e)
+                catch (WebDriverTimeoutException e)
                 {
-                    // Convert a TimeoutException into a NoSuchElementException.
+                    // Convert a WebDriverTimeoutException into a NoSuchElementException.
                     throw new NoSuchElementException(e.Message);
                 }
             }
@@ -254,19 +226,29 @@ namespace WebUI.Automation.Framework
         }
 
         /// <summary>
-        /// Returns whether this UI element exists (i.e., present in the DOM tree) or not,
-        /// within the default implicit wait timeout, specified and can be configured by
-        /// <seealso cref="WebUIGlobals.DefaultImplicitWaitTimeout"/>.
+        /// Returns whether this UI element exists (i.e., present in the DOM tree) or not, as of now.
+        /// Unlike getting the <seealso cref="BaseElement.WebElement"/> property,
+        /// getting this property does not involve waiting until the default implicit wait timeout is reached.
         /// </summary>
-        /// <param name="timeOutInSeconds">  timeout in seconds </param>
-        /// <returns> <code>true</code> if this UI element exists within the default implicit wait timeout;
-        ///         <code>false</code> otherwise </returns>
+        /// <returns> <code>true</code> if this UI element exists; <code>false</code> otherwise </returns>
         public virtual bool Exists
         {
             get
             {
-                return BecomeExists(WebUIGlobals.DefaultImplicitWaitTimeout);
+                return BecomeExists(0);
             }
+        }
+
+        /// <summary>
+        /// Returns whether this UI element becomes exists (i.e., present in the DOM tree) or not,
+        /// within the default implicit wait timeout, specified and can be configured by
+        /// <seealso cref="WebUIGlobals.DefaultImplicitWaitTimeout"/>.
+        /// </summary>
+        /// <returns> <code>true</code> if this UI element exists within the default implicit wait timeout;
+        ///         <code>false</code> otherwise </returns>
+        public virtual bool BecomeExist()
+        {
+            return BecomeExists(WebUIGlobals.DefaultImplicitWaitTimeout);
         }
 
         /// <summary>
@@ -287,31 +269,56 @@ namespace WebUI.Automation.Framework
                 return true;
             }
 
-            try
+            if (timeOutInSeconds == 0)
             {
-                WaitUntilExists(timeOutInSeconds);
-                return true;
+                try
+                {
+                    Browser.FindElement(this.locator);
+                    return true;
+                }
+                catch (NoSuchElementException)
+                {
+                    return false;
+                }
             }
-            catch (TimeoutException)
+            else
             {
-                return false;
+                try
+                {
+                    WaitUntilExists(timeOutInSeconds);
+                    return true;
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    return false;
+                }
             }
         }
 
         /// <summary>
-        /// Property indicating whether this UI element is visible or not,
-        /// within the default implicit wait timeout, specified and can be configured by
-        /// <seealso cref="WebUIGlobals.DefaultImplicitWaitTimeout"/>.
+        /// Returns whether this UI element is visible or not, as of now.
+        /// Unlike getting the <seealso cref="BaseElement.WebElement"/> property,
+        /// getting this property does not involve waiting until the default implicit wait timeout is reached.
         /// </summary>
-        /// <param name="timeOutInSeconds">  timeout in seconds </param>
-        /// <returns> <code>true</code> if this UI element exists within the default implicit wait timeout;
-        ///         <code>false</code> otherwise </returns>
+        /// <returns> <code>true</code> if this UI element is visible; <code>false</code> otherwise </returns>
         public virtual bool Visible
         {
             get
             {
-                return BecomeVisible(WebUIGlobals.DefaultImplicitWaitTimeout);
+                return BecomeVisible(0);
             }
+        }
+
+        /// <summary>
+        /// Property indicating whether this UI element becomes visible or not,
+        /// within the default implicit wait timeout, specified and can be configured by
+        /// <seealso cref="WebUIGlobals.DefaultImplicitWaitTimeout"/>.
+        /// </summary>
+        /// <returns> <code>true</code> if this UI element exists within the default implicit wait timeout;
+        ///         <code>false</code> otherwise </returns>
+        public virtual bool BecomeVisible()
+        {
+            return BecomeVisible(WebUIGlobals.DefaultImplicitWaitTimeout);
         }
 
         /// <summary>
@@ -331,14 +338,29 @@ namespace WebUI.Automation.Framework
                 return this.webElement.Displayed;
             }
 
-            try
+            if (timeOutInSeconds == 0)
             {
-                WaitUntilVisible(timeOutInSeconds);
-                return true;
+                try
+                {
+                    IWebElement webElement = Browser.FindElement(this.locator);
+                    return webElement.Displayed;
+                }
+                catch (NoSuchElementException)
+                {
+                    return false;
+                }
             }
-            catch (TimeoutException)
+            else
             {
-                return false;
+                try
+                {
+                    WaitUntilVisible(timeOutInSeconds);
+                    return true;
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    return false;
+                }
             }
         }
 
@@ -348,16 +370,13 @@ namespace WebUI.Automation.Framework
         /// </summary>
         /// <param name="timeOutInSeconds">  time out in seconds </param>
         /// <returns> the located web element </returns>
-        /// <exception cref="TimeoutException"> if this UI element is still not present after the specified timeout is reached   </exception>
+        /// <exception cref="WebDriverTimeoutException"> if this UI element is still not present after the specified timeout is reached   </exception>
         public virtual IWebElement WaitUntilExists(int timeOutInSeconds)
         {
-            if (this.webElement != null)
-            {
-                // This UI element is already tied to a particular IWebElement; there is no need to wait.
-                return this.webElement;
-            }
-            string timeOutMessage = "Timed out after " + timeOutInSeconds + " seconds in waiting for " + this.Name + " to become exists.";
-            return Browser.WaitUntil(ExpectedConditions.ElementExists(this.locator), timeOutInSeconds, timeOutMessage);
+            return WaitUntil<IWebElement>(
+                ExpectedConditions.ElementExists(this.locator),
+                timeOutInSeconds,
+                "Waiting for " + this.Name + " to become exists.");
         }
 
         /// <summary>
@@ -366,16 +385,13 @@ namespace WebUI.Automation.Framework
         /// </summary>
         /// <param name="timeOutInSeconds">  time out in seconds </param>
         /// <returns> the located visible web element </returns>
-        /// <exception cref="TimeoutException"> if this UI element is still not visible after the specified timeout is reached   </exception>
+        /// <exception cref="WebDriverTimeoutException"> if this UI element is still not visible after the specified timeout is reached   </exception>
         public virtual IWebElement WaitUntilVisible(int timeOutInSeconds)
         {
-            if (this.webElement != null)
-            {
-                // TODO: Implement waiting for a IWebElement to become visible (rarely needed).
-                throw new Exception("This method is not yet implemented for a UI element that is tied to a particular IWebElement.");
-            }
-            string timeOutMessage = "Timed out after " + timeOutInSeconds + " seconds in waiting for " + this.Name + " to become visible.";
-            return Browser.WaitUntil<IWebElement>(ExpectedConditions.ElementIsVisible(this.locator), timeOutInSeconds, timeOutMessage);
+            return WaitUntil<IWebElement>(
+                ExpectedConditions.ElementIsVisible(this.locator),
+                timeOutInSeconds,
+                "Waiting for " + this.Name + " to become visible.");
         }
 
         /// <summary>
@@ -383,18 +399,59 @@ namespace WebUI.Automation.Framework
         /// </summary>
         /// <param name="timeOutInSeconds">  time out in seconds </param>
         /// <returns> the return value from <seealso cref="WebDriverWait.Until"/> </returns>
-        /// <exception cref="TimeoutException"> if this UI element is still visible after the specified timeout is reached   </exception>
+        /// <exception cref="WebDriverTimeoutException"> if this UI element is still visible after the specified timeout is reached   </exception>
         public virtual bool WaitUntilNotVisible(int timeOutInSeconds)
+        {
+            return WaitUntil<bool>(
+                ExpectedConditions.InvisibilityOfElementLocated(this.locator),
+                timeOutInSeconds,
+                "Waiting for " + this.Name + " to become not visible.");
+        }
+
+        /// <summary>
+        /// Waits until this UI element becomes clickable, or until the specified timeout is reached.
+        /// It returns the located clickable web element.
+        /// </summary>
+        /// <param name="timeOutInSeconds">  time out in seconds </param>
+        /// <returns> the located clickable web element </returns>
+        /// <exception cref="WebDriverTimeoutException"> if this UI element is still not clickable after the specified timeout is reached   </exception>
+        public virtual IWebElement WaitUntilClickable(int timeOutInSeconds)
+        {
+            return WaitUntil<IWebElement>(
+                ExpectedConditions.ElementToBeClickable(this.locator),
+                timeOutInSeconds,
+                "Waiting for " + this.Name + " to become clickable.");
+        }
+
+        /// <summary>
+        /// Repeatedly calling the specified expected condition function until either it returns
+        /// a non-null value or the specified timeout expires.
+        /// <para>
+        /// Example:
+        /// <pre>
+        ///     // Wait until the "username" text field is visible or timeout. 
+        ///     IWebElement e = usernameTextField.WaitUntil(
+        ///         ExpectedConditions.ElementIsVisible(usernameTextField.Locator),
+        ///         timeOutInSeconds);
+        /// </pre>
+        /// </para>
+        /// </summary>
+        /// <param name="expectedCondition"> the expected condition to wait for </param>
+        /// <param name="timeOutInSeconds">  the timeout in seconds when an expectation is called </param>
+        /// <param name="timeOutMessage">    the message to be included in the WebDriverTimeoutException if it is thrown </param>
+        /// <returns> the non-null value returned by the specified expected condition function </returns>
+        /// <exception cref="WebDriverTimeoutException"> if the specified expected condition function still returns <code>null</code>
+        ///         when the specified timeout is reached </exception>
+        /// <seealso cref= WebDriverWait </seealso>
+        public virtual T WaitUntil<T>(Func<IWebDriver, T> expectedCondition, int timeOutInSeconds, string timeOutMessage = null)
         {
             if (this.webElement != null)
             {
-                // TODO: Implement waiting for a IWebElement to become invisible (rarely needed).
-                throw new Exception("This method is not yet implemented for a UI element that is tied to a particular IWebElement.");
+                throw new NotSupportedException("This method is not yet implemented for a UI element that is tied to a particular WebElement.");
             }
             else
             {
-                string timeOutMessage = "Timed out after " + timeOutInSeconds + " seconds in waiting for " + this.Name + " to become invisible.";
-                return Browser.WaitUntil(ExpectedConditions.InvisibilityOfElementLocated(this.locator), timeOutInSeconds, timeOutMessage);
+                return Browser.WaitUntil(expectedCondition, timeOutInSeconds, timeOutMessage);
             }
         }
 
