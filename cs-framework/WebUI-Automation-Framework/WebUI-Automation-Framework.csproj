@@ -55,6 +55,9 @@
     <Compile Include="Elements\CheckBox.cs" />
     <Compile Include="Elements\ContainerElement.cs" />
     <Compile Include="Elements\RadioButton.cs" />
+    <Compile Include="Elements\TableCell.cs" />
+    <Compile Include="Elements\TableHeaderRow.cs" />
+    <Compile Include="Elements\TableRow.cs" />
     <Compile Include="Elements\Table.cs" />
     <Compile Include="Elements\TableHelper.cs" />
     <Compile Include="Elements\Label.cs" />

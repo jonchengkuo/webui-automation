@@ -117,7 +117,7 @@ namespace WebUI.Automation.Examples.CaStateJobsSearch
                     TextLink vacanciesLink = new TextLink(By.Id(vacanciesLinkId));
                     if (vacanciesLink.Exists)
                     {
-                        string vacanciesTitle = this.table.GetCellText(rowIdx, 0);
+                        string vacanciesTitle = this.table.GetCell(rowIdx, 0).Text;
                         Console.WriteLine();
                         Console.WriteLine("Clicking the '" + vacanciesTitle + "' vacancies link on row " + rowIdx + " (id=" + vacanciesLinkId + ")");
                         vacanciesLink.Click();
@@ -193,7 +193,7 @@ namespace WebUI.Automation.Examples.CaStateJobsSearch
                 {
                     try
                     {
-                        IList<string> textList = this.table.GetCellTexts(rowIdx);
+                        var textList = this.table.GetRow(rowIdx).CellTexts;
                         string jobTitle = textList[0];
                         string salary = textList[1];
                         string jobType = textList[2];
