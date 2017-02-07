@@ -7,6 +7,49 @@ namespace WebUI.Automation.Elements
     /// <summary>
     /// Class for representing and interacting with tables on a web page.
     /// </summary>
+    ///
+    /// <example>
+    /// This example shows a simple way of traversing every cell in a table.
+    /// It is efficient in that it locates the table only once.
+    /// <code>
+    ///   using OpenQA.Selenium;
+    ///   using WebUI.Automation.Elements;
+    ///
+    ///   Table table = new Table(By.id("tableID"));
+    ///   foreach (var row in table.Rows)
+    ///   {
+    ///       foreach (var cell in row.Cells)
+    ///       {
+    ///           string cellText = cell.Text;
+    ///       }
+    ///   }
+    /// </code>
+    /// </example>
+    ///
+    /// <example>
+    /// This example shows a more traditional way of traversing every cell in a table.
+    /// It is less efficient in that, each time <code>table.GetCell</code> is called,
+    /// it will sequentially locate the table, row, and cell every time.
+    /// However, this approach may be desired if the able is periodically refreshed, because
+    /// you can implement a work around to handle the asynchronous update issue by wrapping
+    /// around the <code>table.GetCell</code> call with a while loop and try-catch
+    /// <seealso cref="StaleElementReferenceException"/>.
+    /// <code>
+    ///   using OpenQA.Selenium;
+    ///   using WebUI.Automation.Elements;
+    ///
+    ///   Table table = new Table(By.id("tableID"));
+    ///   int rowCount = table.RowCount;
+    ///   int columnCount = table.ColumnCount;
+    ///   for(int rowIndex = 0; rowIndex &lt; rowCount; rowIndex++)
+    ///   {
+    ///       for(int columnIndex = 0; columnIndex &lt; columnCount; columnIndex++)
+    ///       {
+    ///           string cellText = table.GetCell(rowIndex, columnIndex).Text;
+    ///       }
+    ///   }
+    /// </code>
+    /// </example>
     public class Table : ContainerElement
     {
 
@@ -52,13 +95,14 @@ namespace WebUI.Automation.Elements
                 try
                 {
                     headerRowElement = tableElement.FindElement(By.XPath("thead/tr"));
+                    return new TableHeaderRow(headerRowElement, this, -1);
                 }
                 catch (NoSuchElementException)
                 {
                     // This table may not have a <thead> tag; use the first row instead.
                     headerRowElement = tableElement.FindElement(By.XPath("tr"));
+                    return new TableHeaderRow(headerRowElement, this, 0);
                 }
-                return new TableHeaderRow(headerRowElement, this);
             }
         }
 
@@ -134,7 +178,10 @@ namespace WebUI.Automation.Elements
         }
 
         /// <summary>
-        /// Returns a list of <seealso cref="IWebElement"/> instances that point to the <tr> element of each table row.
+        /// Returns a list of <seealso cref="IWebElement"/> instances that represent to the <![CDATA[<tr>]]> elements in this table.
+        ///
+        /// <para>Note: If this table has a header row and the header row <![CDATA[<tr>]]> tag is not side a <![CDATA[<thead>]]> tag,
+        /// this header row will be included as the first row in the returned list. </para>
         /// </summary>
         /// <exception cref="NoSuchElementException"> if this table is still not visible (default) or does not exist
         ///            after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
@@ -152,6 +199,9 @@ namespace WebUI.Automation.Elements
 
         /// <summary>
         /// Returns the number of rows in this table.
+        ///
+        /// <para>Note: If this table has a header row and the header row <![CDATA[<tr>]]> tag is not side a <![CDATA[<thead>]]> tag,
+        /// this header row will be counted as one of the rows of the table. </para>
         /// </summary>
         /// <exception cref="NoSuchElementException"> if this table is still not visible (default) or does not exist
         ///            after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
@@ -166,7 +216,10 @@ namespace WebUI.Automation.Elements
         }
 
         /// <summary>
-        /// Returns a list of <seealso cref="TableCell"/> instances that represent the cells in this table row.
+        /// Returns a list of <seealso cref="TableRow"/> instances that represent all of the rows in this table.
+        ///
+        /// <para>Note: If this table has a header row and the header row <![CDATA[<tr>]]> tag is not side a <![CDATA[<thead>]]> tag,
+        /// this header row will be included as the first row in the returned list. </para>
         /// </summary>
         /// <exception cref="NoSuchElementException"> if this table is still not visible (default) or does not exist
         ///            after the <seealso cref="WebUI.DefaultImplicitWaitTimeout default implicit wait timeout"/> is reached </exception>
@@ -180,9 +233,10 @@ namespace WebUI.Automation.Elements
                 IWebElement tableElement = WebElement;
                 var rowElements = TableHelper.FindRowElements(tableElement);
                 var tableRows = new List<TableRow>(rowElements.Count);
+                int index = 0;
                 foreach (IWebElement rowElement in rowElements)
                 {
-                    tableRows.Add(new TableRow(rowElement, this));
+                    tableRows.Add(new TableRow(rowElement, this, index++));
                 }
                 return tableRows;
             }
@@ -214,7 +268,7 @@ namespace WebUI.Automation.Elements
         public virtual TableRow GetRow(int rowIndex)
         {
             IWebElement rowElement = GetRowElement(rowIndex);
-            return new TableRow(rowElement, this);
+            return new TableRow(rowElement, this, rowIndex);
         }
 
         /// <summary>
@@ -244,7 +298,7 @@ namespace WebUI.Automation.Elements
         public virtual TableCell GetCell(int rowIndex, int columnIndex)
         {
             IWebElement cellElement = GetCellElement(rowIndex, columnIndex);
-            return new TableCell(cellElement);
+            return new TableCell(cellElement, rowIndex, columnIndex);
         }
 
         /// <summary>

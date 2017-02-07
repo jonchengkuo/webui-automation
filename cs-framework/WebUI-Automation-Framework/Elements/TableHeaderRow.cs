@@ -13,10 +13,13 @@ namespace WebUI.Automation.Elements
         /// <summary>
         /// Constructs an object to represent and interact with the header row of a table on a web page. </summary>
         /// <param name="webElement">  The <seealso cref="IWebElement"/> of this table row;
-        ///                     it should refer to an HTML {@code <tr>} tag in a page. </param>
-        /// <param name="table">  The <seealso cref="Table"/> element of this table row </param>
+        ///                       it should refer to an HTML {@code <tr>} tag in a page. </param>
+        /// <param name="table">  The table that contains this table header row </param>
+        /// <param name="index">  The row index of this table header row.
+        ///                       It is -1 if the header row is inside the <![CDATA[<thead>]]> tag;
+        ///                       it is 0 if the header row is not inside the  <![CDATA[<thead>]]> tag. </param>
         /// <exception cref="NullPointerException"> if the specified <code>webElement</code> is <code>null</code> </exception>
-        public TableHeaderRow(IWebElement webElement, Table table) : base(webElement, table)
+        public TableHeaderRow(IWebElement webElement, Table table, int index) : base(webElement, table, index)
         {
         }
 

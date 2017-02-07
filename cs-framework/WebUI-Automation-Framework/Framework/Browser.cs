@@ -22,15 +22,16 @@ namespace WebUI.Automation.Framework
     /// 
     /// <para>An instance of this class may be in one of the following states:</para>
     /// <ol>
-    ///   <li>Non-opened: The default state; no web browser instance is associated with this <seealso cref="Browser"/> instance.
-    ///   <li>Opened: An opened web browser instance is associated with this <seealso cref="Browser"/> instance.
+    ///   <li>Non-opened: The default state; no web browser instance is associated with this <seealso cref="Browser"/> instance.</li>
+    ///   <li>Opened: An opened web browser instance is associated with this <seealso cref="Browser"/> instance.</li>
     /// </ol>
     /// 
     /// <para>An instance of this class may enter the opened state by calling the <seealso cref="Browser.Launch"/> method.</para>
-    /// 
-    /// <para>Example:</para>
+    /// </summary>
+    ///
+    /// <example>
     /// The following code opens and closes a Chrome browser:
-    /// <pre>
+    /// <code>
     ///   using WebUI.Automation.Framework;
     ///
     ///   using (Browser browser = new Browser()) {
@@ -38,8 +39,8 @@ namespace WebUI.Automation.Framework
     ///       // Do something.
     ///       // The browser will be automatically closed after this line.
     ///   }
-    /// </pre>
-    /// </summary>
+    /// </code>
+    /// </example>
     public class Browser : ISearchContext, IDisposable
     {
         #region Browser constructor and properties (1)

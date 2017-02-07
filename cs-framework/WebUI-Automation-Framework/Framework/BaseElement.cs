@@ -20,23 +20,24 @@ namespace WebUI.Automation.Framework
     /// Because every UI element shown on a web page is defined by a particular HTML element,
     /// this framework sometimes uses the term <em>UI element</em> and <em>HTML element</em> interchangeably.</P>
     /// 
-    /// For a UI element created with a <seealso cref="By"/> locator, every time your code interacts with the UI element
+    /// <para>For a UI element created with a <seealso cref="By"/> locator, every time your code interacts with the UI element
     /// (by calling its public methods), it will always try to locate its HTML element on the web page with its locator.
     /// This design is less efficient because it does not cache a previously located HTML element (i.e.,
     /// it does not reuse a previously available IWebElement object). However, this design does guarantee that
     /// it will always interact with the current, up-to-date web page. From the framework's perspective, it has no way
-    /// to know whether a previously located HTML element still exists or not.</P>
+    /// to know whether a previously located HTML element still exists or not.</para>
     /// 
     /// <P>On the other hand a UI element created with a <seealso cref="IWebElement"/> does not have a locator.
     /// It will assume that the IWebElement given to it is always available and will use it for any UI interaction.
     /// This design is more efficient, but it relies on the caller (i.e., your code) to properly manage the
     /// life-cycle of a UI element and its IWebElement.
     /// It is designed to be used as a transient UI element that lives for a short period of time.</P>
+    /// </summary>
     /// 
-    /// <para><b>Example:</b></para>
-    /// <pre>
+    /// <example>
+    /// <code>
     ///   using OpenQA.Selenium;
-    ///   using WebUI.Automation.Elements;
+    ///   using WebUI.Automation.Framework;
     /// 
     ///   public class Button extends BaseElement {
     ///       public Button(By locator) {
@@ -55,13 +56,12 @@ namespace WebUI.Automation.Framework
     /// 
     ///   IWebElement button2Element = browser.findElement(By.id("buttonId2"));
     ///   Button button2 = new Button(button2Element);
-    /// </pre> 
-    /// </summary>
+    /// <code>
+    /// </example>
     public class BaseElement
     {
 
         // Private fields that can only be set by constructors.
-        readonly By locator;
         readonly IWebElement webElement;
 
         private bool expectVisible = true;
@@ -84,7 +84,7 @@ namespace WebUI.Automation.Framework
             {
                 throw new System.ArgumentNullException("The locator given to the UI element is null.");
             }
-            this.locator = locator;
+            Locator = locator;
         }
 
         /// <summary>
@@ -106,13 +106,7 @@ namespace WebUI.Automation.Framework
         /// If this UI element is created with a <seealso cref="IWebElement"/> instead of a locator, this property will return <code>null</code>. </summary>
         /// <returns> the <seealso cref="By"/> locator of this UI element;
         ///         <code>null</code> if this UI element is created with a <seealso cref="IWebElement"/> instead of a locator </returns>
-        public virtual By Locator
-        {
-            get
-            {
-                return this.locator;
-            }
-        }
+        public virtual By Locator { get; }
 
         protected virtual bool ExpectVisible
         {
@@ -132,13 +126,13 @@ namespace WebUI.Automation.Framework
         {
             get
             {
-                if (this.locator == null)
+                if (Locator == null)
                 {
                     return this.GetType().Name + "(" + this.webElement.ToString() + ")";
                 }
                 else
                 {
-                    return this.GetType().Name + "(" + this.locator.ToString() + ")";
+                    return this.GetType().Name + "(" + Locator.ToString() + ")";
                 }
             }
         }
@@ -151,13 +145,13 @@ namespace WebUI.Automation.Framework
         {
             get
             {
-                if (this.locator == null)
+                if (Locator == null)
                 {
                     return false;
                 }
                 else
                 {
-                    return (this.locator is ByTBD);
+                    return (Locator is ByTBD);
                 }
             }
         }
@@ -197,7 +191,7 @@ namespace WebUI.Automation.Framework
             IWebElement webElement = null;
             if (timeOutInSeconds == 0)
             {
-                webElement = Browser.FindElement(this.locator);
+                webElement = Browser.FindElement(Locator);
                 if (this.expectVisible && !webElement.Displayed)
                 {
                     throw new NoSuchElementException(this.Name + " exists in the DOM tree but not visible.");
@@ -273,7 +267,7 @@ namespace WebUI.Automation.Framework
             {
                 try
                 {
-                    Browser.FindElement(this.locator);
+                    Browser.FindElement(Locator);
                     return true;
                 }
                 catch (NoSuchElementException)
@@ -342,7 +336,7 @@ namespace WebUI.Automation.Framework
             {
                 try
                 {
-                    IWebElement webElement = Browser.FindElement(this.locator);
+                    IWebElement webElement = Browser.FindElement(Locator);
                     return webElement.Displayed;
                 }
                 catch (NoSuchElementException)
@@ -374,7 +368,7 @@ namespace WebUI.Automation.Framework
         public virtual IWebElement WaitUntilExists(int timeOutInSeconds)
         {
             return WaitUntil<IWebElement>(
-                ExpectedConditions.ElementExists(this.locator),
+                ExpectedConditions.ElementExists(Locator),
                 timeOutInSeconds,
                 "Waiting for " + this.Name + " to become exists.");
         }
@@ -389,7 +383,7 @@ namespace WebUI.Automation.Framework
         public virtual IWebElement WaitUntilVisible(int timeOutInSeconds)
         {
             return WaitUntil<IWebElement>(
-                ExpectedConditions.ElementIsVisible(this.locator),
+                ExpectedConditions.ElementIsVisible(Locator),
                 timeOutInSeconds,
                 "Waiting for " + this.Name + " to become visible.");
         }
@@ -403,7 +397,7 @@ namespace WebUI.Automation.Framework
         public virtual bool WaitUntilNotVisible(int timeOutInSeconds)
         {
             return WaitUntil<bool>(
-                ExpectedConditions.InvisibilityOfElementLocated(this.locator),
+                ExpectedConditions.InvisibilityOfElementLocated(Locator),
                 timeOutInSeconds,
                 "Waiting for " + this.Name + " to become not visible.");
         }
@@ -418,7 +412,7 @@ namespace WebUI.Automation.Framework
         public virtual IWebElement WaitUntilClickable(int timeOutInSeconds)
         {
             return WaitUntil<IWebElement>(
-                ExpectedConditions.ElementToBeClickable(this.locator),
+                ExpectedConditions.ElementToBeClickable(Locator),
                 timeOutInSeconds,
                 "Waiting for " + this.Name + " to become clickable.");
         }
