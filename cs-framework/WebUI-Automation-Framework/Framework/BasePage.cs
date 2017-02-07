@@ -9,9 +9,10 @@ namespace WebUI.Automation.Framework
     /// Base class for representing and interacting with a web page using the page object model.
     /// A subclass should be defined for each specific web page
     /// to simulate its application-specific UI behaviors (e.g., logging in).
+    /// </summary>
     /// 
-    /// <para><b>Example:</b></para>
-    /// <pre>
+    /// <example>
+    /// <code>
     ///   using OpenQA.Selenium;
     ///   using WebUI.Automation.Elements;
     ///   using WebUI.Automation.Framework;
@@ -30,8 +31,7 @@ namespace WebUI.Automation.Framework
     ///
     ///   LoginPage loginPage = new LoginPage();
     ///   loginPage.WaitUntilAvailable().LogIn("username", "password");
-    /// </pre> 
-    /// </summary>
+    /// </code>
     public class BasePage<T> where T : BasePage<T>
     {
 

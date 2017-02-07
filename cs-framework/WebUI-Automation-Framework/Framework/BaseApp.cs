@@ -1,5 +1,4 @@
 ﻿using System;
-using OpenQA.Selenium;
 
 namespace WebUI.Automation.Framework
 {
@@ -8,13 +7,11 @@ namespace WebUI.Automation.Framework
     /// Base class for representing and interacting with a web application using the page object model.
     /// A subclass should be defined for each specific web application
     /// to simulate its application-specific UI behaviors (e.g., logging in).
-    /// 
-    /// <para><b>Example:</b></para>
-    /// <pre>
-    ///   using OpenQA.Selenium;
-    ///   using WebUI.Automation.Elements;
+    /// </summary>
+    ///
+    /// <example>
+    /// <code>
     ///   using WebUI.Automation.Framework;
-    ///   using static WebUI.Automation.Elements.ElementFactory;
     ///
     ///   public class MyApp : BaseApp {
     ///       LoginPage LoginPage = new LoginPage();
@@ -55,17 +52,14 @@ namespace WebUI.Automation.Framework
     ///       }
     ///       // The web browser will be automatically closed after this line.
     ///   }
-    /// </pre> 
-    /// </summary>
+    /// </code> 
+    /// </example>
     public class BaseApp : IDisposable
     {
 
-        // Private fields that can only be set by constructors.
-        readonly string homeUrl;
-
-        protected BaseApp(string url)
+        protected BaseApp(string homeUrl)
         {
-            this.homeUrl = url;
+            HomeUrl = homeUrl;
         }
 
         /// <summary>
@@ -92,7 +86,7 @@ namespace WebUI.Automation.Framework
         /// Returns the home URL of this web application.
         /// </summary>
         /// <returns> the home URL of this web application </returns>
-        public virtual string HomeUrl { get { return this.homeUrl; } }
+        public string HomeUrl { get; }
 
         /// <summary>
         /// Opens a new web browser instance/window and navigates to the home page of this web application.

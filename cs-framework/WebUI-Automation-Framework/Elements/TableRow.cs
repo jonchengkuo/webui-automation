@@ -13,18 +13,26 @@ namespace WebUI.Automation.Elements
         private Table table;
 
         /// <summary>
-        /// Constructs an object to represent and interact with a row in a table on a web page. </summary>
+        /// Returns the index of this row in the containing table.
+        /// </summary>
+        public int Index { get; }
+
+        /// <summary>
+        /// Constructs an object to represent and interact with a row in a table on a web page.
+        /// </summary>
         /// <param name="webElement">  The <seealso cref="IWebElement"/> of this table row;
-        ///                     it should refer to an HTML {@code <tr>} tag in a page. </param>
-        /// <param name="table">  The <seealso cref="Table"/> element of this table row </param>
+        ///                  it should refer to an HTML {@code <tr>} tag in a page. </param>
+        /// <param name="table">  The table that contains this table row </param>
+        /// <param name="index">  The row index of this table row </param>
         /// <exception cref="NullPointerException"> if the specified <code>webElement</code> is <code>null</code> </exception>
-        public TableRow(IWebElement webElement, Table table) : base(webElement)
+        public TableRow(IWebElement webElement, Table table, int index) : base(webElement)
         {
             this.table = table;
+            this.Index = index;
         }
 
         /// <summary>
-        /// Returns a list of <seealso cref="IWebElement"/> instances that point to the <td> element of each cell in this table row.
+        /// Returns a list of <seealso cref="IWebElement"/> instances that represent to the <![CDATA[<td>]]> elements in this table row.
         /// </summary>
         /// <exception cref="StaleElementReferenceException">Thrown if the <seealso cref="IWebElement"/> of this table row becomes invalid.</exception>
         public virtual IReadOnlyList<IWebElement> CellElements
@@ -77,9 +85,10 @@ namespace WebUI.Automation.Elements
             {
                 var cellElements = CellElements;
                 var tableCells = new List<TableCell>(cellElements.Count);
+                int columnIndex = 0;
                 foreach (IWebElement cellElement in cellElements)
                 {
-                    tableCells.Add(new TableCell(cellElement));
+                    tableCells.Add(new TableCell(cellElement, Index, columnIndex++));
                 }
                 return tableCells;
             }
@@ -93,7 +102,7 @@ namespace WebUI.Automation.Elements
         public virtual TableCell GetCell(int columnIndex)
         {
             IWebElement cellElement = TableHelper.FindCellElement(WebElement, columnIndex);
-            return new TableCell(cellElement);
+            return new TableCell(cellElement, Index, columnIndex);
         }
 
         /// <summary>
